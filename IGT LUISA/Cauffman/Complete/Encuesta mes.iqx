@@ -1,0 +1,167 @@
+﻿<dropdown sex>
+/ caption = "Sexo"
+/ options = ("Femenino", "Masculino")
+</dropdown>
+
+<textbox age>
+/ caption = "Edad"
+/ mask = positiveinteger
+/ range = (7, 110)
+</textbox>
+
+<dropdown estrato>
+/ caption = "Estrato socioeconomico"
+/ options = ("1", "2","3", "4","5", "6")
+</dropdown>
+
+<radiobuttons 1>
+/ caption = "Regularmente duerme de …:"
+/ options = ("1 a 2 horas", "3 a 4 horas", "5 a 6 horas", "7 a 8 horas", "9 a 10 horas", "mas de 10 horas")
+</radiobuttons>
+
+<radiobuttons 2>
+/ caption = "La hora regular de acostarse ha sido (aproximadamente):"
+/ options = ("Antes de las 9:30 pm", "De 9:30 a 10 pm", "De 10:01 a 10:30 pm", "De 10:31 a 11:00 pm", "De 11:01 a 11:30 pm" ,"Después de las 11:30 pm")
+</radiobuttons>
+
+<radiobuttons 3>
+/ caption = "¿Tuvo dificultad para conciliar el sueño? (En una escala del 1 al 6, en donde 1 es ninguna dificultad y 6 es mucha dificultad)."
+/ options = ("1 Ninguna dficultad", "2", "3", "4", "5", "6 Mucha dificultad")
+/ optionvalues = ("1", "2", "3", "4", "5", "6")
+</radiobuttons>
+
+<radiobuttons 4>
+/ caption = "¿Aproximadamente cuántos minutos se demora en conciliar el sueño (desde que se acuesta a dormir)?"
+/ options = ("Menos de 5 minutos" , "10 minutos", "15 minutos", "20 minutos", " mas de 20 minutos")
+</radiobuttons>
+
+<radiobuttons 5>
+/ caption = "¿Se ha despertado luego de conciliar el sueño en la noche?"
+/ options = ("Ninguna vez durante el mes ", "Al menos una vez al mes", "Dos veces al mes", "Tres veces al mes", "Cuatro veces al mes", "Más de 5 veces al mes")
+</radiobuttons>
+
+<radiobuttons 6>
+/ caption = "¿En el último mes le han dicho (algún familiar, pareja u otro) que ha roncado durante el sueño? (En una escala del 1 al 6, en donde 1 es nunca y 6 es siempre)"
+/ options = ("1 Nunca", "2", "3", "4", "5", "6 Siempre")
+/ optionvalues = ("1", "2", "3", "4", "5", "6")
+</radiobuttons>
+
+<radiobuttons 7>
+/ caption = "¿Ha sentido que su sueño NO era tranquilo (movimiento sin descanso, sensación de tensión, habla, etc.) mientras duerme? (En una escala del 1 al 6, en donde 1 es totalmente en desacuerdo y 6 es totalmente de acuerdo) "
+/ options = ("1 Totalmente en desacuerdo", "2", "3", "4", "5","6 totalmente de acuerdo")
+/ optionvalues = ("1", "2", "3", "4", "5", "6")
+</radiobuttons>
+
+<radiobuttons 8>
+/ caption = "¿Se ha despertado por falta de aire o con dolor de cabeza? (En una escala del 1 al 6, en donde 1 es nunca y 6 es siempre)"
+/ options = ("1 Nunca", "2", "3", "4", "5", "6 Siempre")
+/ optionvalues = ("1", "2", "3", "4", "5", "6")
+</radiobuttons>
+
+<radiobuttons 9>
+/ caption = "¿Se ha sentido descansado al despertarse en la mañana? (En una escala del 1 al 6, en donde 1 es nada descansado y 6 es muy descansado)"
+/ options = ("1 nada descansado", "2", "3", "4", "5","6 muy descansado")
+/ optionvalues = ("1", "2", "3", "4", "5", "6")
+</radiobuttons>
+
+<radiobuttons 10>
+/ caption = "¿Se ha sentido mareado o somnoliento durante el día? (En una escala del 1 al 6, en donde 1 es nunca y 6 es siempre)"
+/ options = ("1 nunca", "2", "3", "4", "5","6 siempre")
+/ optionvalues = ("1", "2", "3", "4", "5", "6")
+</radiobuttons>
+
+<radiobuttons 11>
+/ caption = "¿cómo evaluaría en general la calidad de su sueño? (En una escala del 1 al 6, en donde 1 es pésima y 6 es excelente)"
+/ options = ("1 pesima", "2", "3", "4", "5","6 excelente")
+/ optionvalues = ("1", "2", "3", "4", "5", "6")
+</radiobuttons>
+
+<radiobuttons 12>
+/ caption = "¿tomó medicamentos o sustancias psicoactivas?"
+/ options = ("Ninguna vez", "Al menos una vez a la semana", "Dos veces a la semana", "Tres veces a la semana", "Cuatro veces a la semana", "Mas de cinco veces a la semana")  
+</radiobuttons>
+
+<radiobuttons 13>
+/ caption = "¿En el último mes en promedio cómo fue su consumo de cafeína (p.e café, gaseosas oscuras, energizantes) por día? (taza o pocillo normal 4 onzas)."
+/ options = ("0 tazas", "1 taza", "de 2 a 3 tazas", "de 4 a 5 tazas", "6 a 7 tazas", "Mas de 7 tazas")  
+</radiobuttons>
+
+<radiobuttons 14>
+/ caption = "¿En qué horario realiza el de consumo de la cafeína usualmente?"
+/ options = ("Mañana", "Media mañana", "Medio dia", "Tarde", "Noche", "Ninguno")  
+</radiobuttons>
+
+<dropdown 15>
+/ caption = "¿Durante el día acostumbró a dormir siestas?"
+/ options = ("Si", "No")
+</dropdown>
+
+<textbox 16>
+/ caption = "Si su respuesta anterior es afirmativa, responda lo siguiente (preguntas 19 a la 21): 
+¿De cuántos minutos solían ser las siestas?"
+</textbox>
+
+<textbox 17>
+/ caption = "¿A qué hora solían ser (la mayoría de las veces) ?"
+</textbox>
+
+<dropdown 18>
+/ caption = "¿Considera que las siestas fueron reparadoras? "
+/ options = ("Si", "No")
+</dropdown>
+
+<radiobuttons 19>
+/ caption = " ¿En el último mes cuántas veces a la semana consumió alcohol (En una escala del 1 al 6, en donde 1 es “ninguna vez a la semana” y 6 es “todos los días”)?"
+/ options = ("1 ninguna vez a la semana", "2", "3", "4", "5","6 todos los dias")
+/ optionvalues = ("1", "2", "3", "4", "5", "6")  
+</radiobuttons>
+
+<dropdown 20>
+/ caption = "Ha sido diagnosticado con algún trastorno del sueño "
+/ options = ("Si", "No")
+</dropdown>
+
+<textbox 21>
+/ caption = "En caso de que la anterior sea positiva diga cual de lo contrario escriba -ninguna-"
+</textbox>
+
+<surveypage demographics1>
+/ caption = "Cuestionario de calidad del sueño
+
+Las siguientes preguntas buscan evaluar sus hábitos de sueño durante el último mes. 
+A continuación, se presentarán una serie de preguntas relacionadas con sus hábitos de sueño; por favor, respóndalas pensando siempre en sus experiencias DURANTE EL ULTIMO MES"
+/ fontstyle = ("arial", -16, true, false, false, false, 5, 0)
+/ questions = [1=sex; 2=age;3=estrato; 4=1; 5=2 ] 
+</surveypage>
+
+<surveypage demographics2>
+/ caption = "Calidad del sueño DURANTE EL MES (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=3; 2=4; 3=5; 4=6] 
+</surveypage>
+
+<surveypage demographics3>
+/ caption = "Calidad del sueño DURANTE EL MES (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=7; 2=8; 3=9; 4=10;] 
+</surveypage>
+
+<surveypage demographics4>
+/ caption = "Calidad del sueño DURANTE EL MES (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=11; 2=12; 3=13; 4=14] 
+</surveypage>
+
+<surveypage demographics5>
+/ caption = "Calidad del sueño DURANTE EL MES (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=15; 2=16; 3=17; 4=18;5=19; 6=20; 7=21] 
+</surveypage>
+
+<survey demographics>
+/ pages = [1=demographics1; 2=demographics2; 3=demographics3; 4=demographics4; 5=demographics5]
+/ responsefontstyle = ("Verdana", -12, false, false, false, false, 5, 0)
+/ itemfontstyle = ("Verdana", -13, false, false, false, false, 5, 0)
+/ itemspacing = 2%
+/ showpagenumbers = false
+</survey>

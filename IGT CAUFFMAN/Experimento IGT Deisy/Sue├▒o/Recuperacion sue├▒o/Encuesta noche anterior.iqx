@@ -1,0 +1,144 @@
+﻿<textbox 1>
+/ caption="¿A qué hora se acostó anoche? (hh:mm PM)."
+</textbox>
+
+<radiobuttons 2>
+/caption = "¿Tuvo dificultad para conciliar el sueño?"
+/ options = ("1 Ninguna dificultad", "2", "3", "4", "5", "6 Mucha dificultad")
+/ optionvalues = ("1", "2", "3", "4", "5", "6")
+</radiobuttons>
+
+<radiobuttons 3>
+/ caption="¿Aproximadamente cuántos minutos se demoró en conciliar el sueño (desde que se acostó a dormir)?"
+/ options=("Menos de 5 minutos", "5 minutos", "10 minutos", "15 minutos", "20 minutos", "Más de 20 minutos")
+</radiobuttons>
+
+<radiobuttons 4>
+/caption = "Se despertó de manera repentina luego de la conciliación del sueño"
+/ options = ("SI", "NO")
+</radiobuttons>
+
+<textbox 5>
+/ caption = "Si su respuesta anterior es afirmativa, ¿cuántas veces se despertó? (Si su respuesta fue NEGATIVA ponga 0 -cero-)"
+/ range = (0,100)
+</textbox>
+
+<radiobuttons 6>
+/caption = "¿La noche anterior durmió en el lugar donde usualmente acostumbra a hacerlo?. "
+/ options = ("SI", "NO")
+</radiobuttons>
+
+<radiobuttons 7>
+/caption = "¿Las condiciones ambientales (p.e., ruido, luz, temperatura) durante su sueño fueron óptimas?"
+/ options = ("1 Nada óptimas", "2", "3", "4", "5", "6 Muy óptimas")
+/ optionvalues = ("1", "2", "3", "4","5","6")
+</radiobuttons>
+
+<radiobuttons 8>
+/caption = "¿Qué tan adecuadas fueron sus condiciones físicas (p.e tenía algún malestar muscular o alguna enfermedad) antes de dormir?"
+/ options = ("1 Muy inadecuadas", "2", "3", "4", "5", "6 Muy adecuadas")
+/ optionvalues = ("1", "2", "3", "4","5", "6")
+</radiobuttons>
+
+<radiobuttons 9>
+/caption = "¿Qué tanta tranquilidad sintió antes de dormir?"
+/ options = ("1 Muy Intranquilo", "2", "3", "4", "5", "6 Muy tranquilo")
+/ optionvalues = ("1", "2", "3", "4","5", "6")
+</radiobuttons>
+
+<radiobuttons 10>
+/caption = "¿Sintió que su sueño NO era tranquilo (movimiento sin descanso, sensación de tensión, habla, etc.), mientras dormía?"
+/ options = ("1 Muy Intranquilo", "2", "3", "4", "5", "6 Muy tranquilo")
+/ optionvalues = ("1", "2", "3", "4","5", "6")
+</radiobuttons>
+
+<textbox 11>
+/ caption="¿A qué hora se despertó esta mañana? (hh:mm AM)."
+</textbox>
+
+<radiobuttons 12>
+/caption = "¿Usualmente se despierta a esta hora?"
+/ options = ("1 Nunca", "2", "3", "4", "5", "6 Siempre")
+/ optionvalues = ("1", "2", "3", "4","5", "6")
+</radiobuttons>
+
+<textbox 13>
+/ caption="¿Cuánto tiempo tardó en llegar a la Universidad desde su residencia? (hh:mm)."
+</textbox>
+
+<textbox 14>
+/ caption="¿Cuánto tiempo ha pasado (aproximadamente) desde que se despertó hasta este momento? (hh:mm)."
+</textbox>
+
+<radiobuttons 15>
+/ caption="¿Cuántas tazas de cafeína (p.e café, gaseosas oscuras, energizantes) ha consumido en las últimas 24 horas? (taza o pocillo normal 4 onzas)"
+/ options=("0 tazas", "1 taza", "De 2 a 3 tazas", "De 4 a 5 tazas", "De 6 a 7 tazas", "Más de 7 tazas")
+</radiobuttons>
+
+<radiobuttons 16>
+/ caption = "¿En las últimas 24 horas ha consumido sustancias psicoactivas o medicamentos?"
+/options = ("SI", "NO")
+</radiobuttons>
+
+<textbox 17>
+/caption = "Si su respuesta anterior fue afirmativa por favor especifique cuáles consumió (Si su respuesta fue NEGATIVA escriba Ninguna)"
+</textbox>
+
+<radiobuttons 18>
+/caption = "¿Qué tan somnoliento se siente en este momento?"
+/options = ("1 Nada somnoliento", "2", "3", "4", "5", "6 Muy somnoliento")
+/ optionvalues = ("1", "2", "3", "4","5", "6")
+</radiobuttons>
+
+<radiobuttons 19>
+/caption = "Pensando en la noche anterior, ¿cómo evalúa la calidad de su sueño?"
+/options = ("1 Pésima", "2", "3", "4", "5", "6 Excelente")
+/ optionvalues = ("1", "2", "3", "4","5", "6")
+</radiobuttons>
+
+<radiobuttons 20>
+/ caption = "¿Qué tanto siente que descansó?"
+/ options = ("1 Nada descansado", "2", "3", "4", "5", "6 Muy descansado")
+/ optionvalues = ("1", "2", "3", "4","5", "6")
+</radiobuttons>
+
+<surveypage demographics1>
+/ caption = 
+                                            "Escala de calidad de sueño -Noche Anterior
+
+Las siguientes preguntas buscan explorar la calidad de su sueño en la -NOCHE ANTERIOR-. Por favor responda todas las siguientes preguntas"
+/ fontstyle = ("arial", -16, true, false, false, false, 5, 0)
+/ questions = [1=1; 2=2; 3=3 ] 
+</surveypage>
+
+<surveypage demographics2>
+/ caption = "Calidad del sueño NOCHE ANTERIOR (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=4; 2=5; 3=6; 4=7] 
+</surveypage>
+
+<surveypage demographics3>
+/ caption = "Calidad del sueño NOCHE ANTERIOR (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=8; 2=9; 3=10; 4=11] 
+</surveypage>
+
+<surveypage demographics4>
+/ caption = "Calidad del sueño NOCHE ANTERIOR (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=12; 2=13; 3=14; 4=15] 
+</surveypage>
+
+<surveypage demographics5>
+/ caption = "Calidad del sueño NOCHE ANTERIOR (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=16; 2=17; 3=18; 4=19;5=20] 
+</surveypage>
+
+<survey demographics>
+/ pages = [1=demographics1; 2=demographics2; 3=demographics3; 4=demographics4; 5=demographics5]
+/ responsefontstyle = ("Verdana", -12, false, false, false, false, 5, 0)
+/ itemfontstyle = ("Verdana", -13, false, false, false, false, 5, 0)
+/ itemspacing = 2%
+/ showpagenumbers = false
+</survey>

@@ -1,0 +1,4 @@
+date	time	group	subject	build	sex_response	sex_latency	age_response	age_latency	1_response	1_latency	2_response	2_latency	3_response	3_latency	4_response	4_latency	5_response	5_latency	6_response	6_latency	7_response	7_latency	8_response	8_latency	9_response	9_latency	10_response	10_latency	
+110917	19:09:54	1	211119	4.0.9.0	Masculino	37290	17	37290	No	37290	No	37290	No	37290	No	37290	Baraja 1	49944	Baraja 2	49944	Baraja 4	49944	Baraja 3	49944	baraja 1	49944	baraja 4	49944	
+110917	19:43:31	1	212125	4.0.9.0	Femenino	30473	18	30473	No estoy seguro	30473	No estoy seguro	30473	Si	30473	Si	30473	Baraja 2	29384	Baraja 4	29384	Baraja 1	29384	Baraja 3	29384	baraja 4	29384	baraja 1	29384	
+111417	19:43:20	1	211136	4.0.9.0	Masculino	38131	23	38131	No	38131	No	38131	Si	38131	Si	38131	Baraja 2	30169	Baraja 4	30169	Baraja 1	30169	Baraja 3	30169	baraja 2	30169	baraja 1	30169	

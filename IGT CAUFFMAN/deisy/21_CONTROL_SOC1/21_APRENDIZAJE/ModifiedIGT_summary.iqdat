@@ -1,0 +1,5 @@
+script.startdate	script.starttime	script.subjectid	script.elapsedtime	values.completed	values.groupnumber	values.currenttotal	expressions.percent_goodplay	expressions.percent_badplay	expressions.netscore_total
+110917	07:57:23	212125	114790	1	2	2400	60	70	-10
+111417	07:30:44	211130	17698	0	1	2000	0	0	0
+111417	07:31:33	211130	102364	1	2	2600	40	80	-40
+111417	08:02:31	211136	80570	1	4	2950	50	70	-20

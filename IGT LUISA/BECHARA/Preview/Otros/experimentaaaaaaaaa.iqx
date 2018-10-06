@@ -1,0 +1,734 @@
+﻿**************************************************************************************************************
+**************************************************************************************************************
+							IOWA GAMBLING TASK - Modified Version
+**************************************************************************************************************
+**************************************************************************************************************
+										SCRIPT INFO
+
+last updated: 09-24-2014  by K. Borchert (katjab@millisecond.com) for Millisecond Software LLC
+
+Copyright ©  09-24-2014 Millisecond Software
+**************************************************************************************************************
+**************************************************************************************************************
+	BACKGROUND INFO
+**************************************************************************************************************
+**************************************************************************************************************
+										*SCRIPT PURPOSE*
+
+This sample script implements a version of the modified Iowa Gambling Task as described in:
+
+Cauffman, E., Shulman, E.P, Steinberg, L., Claus, E., Marie T. Banich, M.T.,  Sandra Graham, S., & Jennifer Woolard, J. (2010). 
+Age Differences in Affective Decision Making as Indexed by Performance on the Iowa Gambling Task.
+Developmental Psychology, Vol. 46, No. 1, 193–207.
+
+
+This script builds on the original Millisecond Software script "IowaGamblingTask.iqx" based on
+Bechara A., Damasio A. R., Damasio H., Anderson S. W. (1994). 
+Insensitivity to future consequences following damage to human prefrontal cortex. Cognition, 50, 7-15 .
+
+
+											*TASK*
+Participant are presented 4 decks of cards. One of the deck of cards has a yellow arrow above it.
+Participants have to decide to 'play' this deck of cards to possibly win some money or pass up the 
+opportunity (to make sure to not lose any money already won). If they decide to play they can win money,
+lose money, or neither lose nor win money. If they pass, they neither lose nor win money.
+The goal is to win as much money as possible. The 4 different decks are attached with different
+win probabilities: 2 of the decks have higher wins and higher losses (being disadvantageous overall) 
+and 2 decks have lower wins but lower losses (being advantageous overall).
+
+
+										*SCRIPT SPECIFICS*
+
+(1) EDITABLE CODE:
+check under EDITABLE CODE for (relatively) easily editable values, stimuli, instructions etc. 
+Keep in mind that you can use this script as a template and therefore always "mess" with the entire code to 
+further customize your experiment.
+
+Examples of what can be manipulated in this script via values and lists:
+- amount of start money
+- amount of number of initial wins for plays from each deck
+- win amounts
+- loss amounts
+(Note: Deck 3 were given slightly altered win/loss probabilities than in Cauffman et al (2010).
+More info under EDITABLE CODE -> Editable lists -> list.deck3losses)
+
+If you have any questions, please don't hesitate to contact Millisecond Software.
+
+
+(2) GAME SET UP:
+* The game is set up to play 6 blocks of 20 trials (5 trials per deck) => 30 trials per deck total
+* A deck is randomly selected for each trial.
+* The four decks are randomly assigned a (permanent) screen location. 
+* By default, in this script the win/loss probabilities assigned are aligned with the model of "once played, 
+cards are NOT a returned to the deck" (therefore turning probabilities into actual frequencies)
+
+(3) Check under DATA for data file information. Customize if necessary.
+**************************************************************************************************************
+**************************************************************************************************************
+ EDITABLE CODE
+**************************************************************************************************************
+**************************************************************************************************************
+
+*******************************************************************
+*********************************************
+ EDITABLE VALUES
+*********************************************
+*******************************************************************
+
+/playkey: 								scancode of 'play' key (default: 30 -> a)
+/passkey:								scancode of 'pass' key (default: 38 -> l)
+/playkey_label:							description of play key
+/passkey_label:							description of pass key
+
+/decisiontime :							time participant has to decide (default: 4000ms)
+/defaultresponse:						if no response occurs, 	defaultresponse = 1 => 'Pass' response
+																defaultresponse = 2 => 'Play' response
+
+/number_forcedwins1-					sets the number of definite wins for each deck that occur during the initial trials for that deck
+/number_forcedwins4						Example: 
+										number_forcedwins1 = 2 => the first play trial for deck 1 that participant can lose is on the third play trial of deck 1
+										number_forcedwins1 = 8 => the first play trial for deck 1 that participant can lose is on the ninth play trial of deck 1
+										=> guarantees the number of guaranteed win play trials from each deck at the beginning
+										(Note: numbers are taken from Cauffman et al (2010), Table 2)
+
+/startamount:							the startamount (default: $2000)
+
+
+<values>
+/decisiontime = 4000
+/defaultresponse = 1
+
+/number_forcedwins1 = 0
+/number_forcedwins2 = 0
+/number_forcedwins3 = 0
+/number_forcedwins4 = 0
+
+/startamount = 2000
+</values>
+*******************************************************************
+*********************************************
+ EDITABLE INSTRUCTIONS
+*********************************************
+*******************************************************************
+NOTE: instructions can be changed here:
+
+<item instructions>
+/ 1 = "En este juego, su objetivo es ganar tanto dinero como sea posible. 
+
+Para cada ronda, una flecha amarilla encima de una de las cuatro barajas de arriba indica que puede tomar una decisión entre jugar o pasar una carta de esa baraja.
+Tendra <%values.decisiontime/1000%>segundos para decidir.
+
+Si decide JUGAR una carta, puede ganar, pero también perder dinero (o ni ganar ni perder dinero).
+Si PASA usted no gana ni pierde dinero.
+Algunas barajas serán más rentables que otras.
+
+Para JUGAR, haga click con el mouse sobre la palabra JUGAR que se encuentra en la parte superior derecha. 
+Para PASAR, haga click con el mouse sobre la palabra PASAR que se encuentra en la parte superior izquierda. 
+
+Empieza con $<%values.currenttotal%>."
+</item>
+
+*******************************************************************
+*********************************************
+ EDITABLE LISTS: GAINS/LOSSES
+*********************************************
+*******************************************************************
+
+********************
+Gains
+********************
+
+Note: the following lists determine the possible gains for the 4 decks.
+By default, items in the list are selected randomly with replacement.
+The default gains are taken from the original IowaGamblingTask.iqx
+
+Disadvantageous Decks:
+<list deck1gains>
+/items = (100)
+/replace = true
+</list>
+
+<list deck2gains>
+/items = (100)
+/replace = true
+</list>
+
+Advantageous Decks:
+<list deck3gains>
+/items = (50)
+/replace = true
+</list>
+
+<list deck4gains>
+/items = (50)
+/replace = true
+</list>
+
+********************
+Losses:
+
+!!!NOTE: 
+
+The loss-item lists for each deck of cards are created based on the
+provided probabilities (Cauffman et al (2010): Table 2).
+However, Deck 3 in this script was written with slightly altered loss/win probabilities from 
+Cauffman's et al (2010). More info under list.deck3losses.
+Except for Deck 3, all decks have the same probabilities as the 
+original (Bechara et al, 1994). 
+
+By default, losses are sampled randomly WITHOUT replacement (/replace = false).
+Model: pick up a card WITHOUT returning it to the deck.
+The lists reset if no more item can be sampled OR the list resets after 6 blocks (whichever comes first)
+
+/replace = true
+Model: pick up a card WITH returning it to the deck
+********************
+
+Disadvantageous Decks:
+
+Note: 
+payoff range: -250 to 100
+probability of a win: 50% => if /replace = false, the win frequency rate across 10 'played' trials is 0.5 (after initial predetermined win trials)
+probability of a loss: 50% => if /replace = false, the lose frequency rate across 10 'played' trials is 0.5 (after initial predetermined win trials)
+probablity of a zero payoff: 0%
+expected win: -$25 (LOSS)
+<list deck1losses>
+/items = (0, 0, 0, 250, 300, 350)
+/replace = false
+/resetinterval = 6
+</list>
+
+Note: 
+payoff range: -1150 to 100
+probability of a win: 90% => if /replace = false, the win frequency rate across 10 'played' trials is 0.9 (after initial predetermined win trials)
+probability of a loss: 10% => if /replace = false, the lose frequency rate across 10 'played' trials is 0.1 (after initial predetermined win trials)
+probablity of a zero payoff: 0%
+expected win: -$25 (LOSS)
+<list deck2losses>
+/items = (0, 0, 0, 0, 0, 1250)
+/replace = false
+/ resetinterval = 6
+</list>
+
+Advantageous Decks:
+
+Note: these are NOT the win/loss probabilities from the original Cauffman et al (2010) article;
+The original win/loss probabilities (see below) could not easily be written as a  10-item items list
+as could be done for the other 3 decks. Therefore the win/loss probabilities used in this script
+are slightly altered but still yield a positive expected win overall (albeit slightly smaller: $17.5 vs. $18.75)
+
+payoff range: -25 to 50
+probability of a win: 50% => if /replace = false, the win frequency rate across 10 'played' trials is 0.5 (after initial predetermined win trials)
+probability of a loss: 30% => if /replace = false, the lose frequency rate across 10 'played' trials is 0.30 (after initial predetermined win trials)
+probablity of a zero payoff: 20% => if /replace = false, the nowin/nolose frequency rate across 10 'played' trials is 0.20 (after initial predetermined win trials)
+expected win: $17.50 (WIN)
+<list deck3losses>
+/items = (0, 0, 0, 50, 75, 75)
+/replace = false
+/ resetinterval = 6
+</list>
+
+!!!!!!!!!!!!!
+ORIGINAL -Cauffman et al (2010):
+payoff range: -25 to 50
+probability of a win: 50% => if /replace = false, the win frequency rate across 4 'played' trials is 0.5
+probability of a loss: 25% => if /replace = false, the lose frequency rate across 4 'played' trials is 0.25
+probablity of a zero payoff: 25%
+expected win: $18.75 (WIN)
+list deck3losses>
+/items = (0, 0, 50, 75)
+/replace = false
+/resetinterval = 6
+</list>
+!!!!!!!!!!!!!!
+
+
+Note: 
+payoff range: -200 to 50
+probability of a win: 90% => if /replace = false, the win frequency rate across 10 'played' trials is 0.9 (after initial predetermined win trials)
+probability of a loss: 10% => if /replace = false, the lose frequency rate across 10 'played' trials is 0.1 (after initial predetermined win trials)
+probablity of a zero payoff: 0%
+expected win: $25 (WIN)
+<list deck4losses>
+/items = (0, 0, 0, 0, 0, 250)
+/replace = false
+/ resetinterval = 6
+</list>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DATA: this section contains data file information
+**************************************************************************************************************
+**************************************************************************************************************
+
+********************
+raw data
+********************
+
+date, time, subject:			date and time script was run with the current subjectnumber 
+blockcode, blocknum:			the name and number of the current block
+trialcode, trialnum: 			the name and number of the currently recorded trial
+								(Note: not all trials that are run might record data) 
+values.cardoffered: 			number of cards offered
+values.groupnumber: 			the groupnumber (1-4) the subject was randomly assigned to	(=> 4 different placements of decks)			
+values.defaultresponse: 		if no response occurs, 	defaultresponse = 1 => 'Pass' response; defaultresponse = 2 => 'Play' response
+values.targetdeck:				the current targetdeck with an arrow
+
+response:						the participant's response
+values.response:				1 = pass; 2 = play (if no response is given values.response evaluates to the defaultresponse)
+latency: 						the trial latency
+values.forcedwins1-		
+values.forcedwins4:				current number of guaranteed wins that will occur when participant decides to 'play' per deck
+values.gain/values.loss/values.netchange:  trial gain/trial loss/net win
+expressions.feedback:			feedback that participant received
+values.currenttotal:			the running total for participant
+					
+expressions.percent_goodplay_block: 	percentage of play-response to advantageous decks per block
+values.number_goodplay_block:  			number of times participant chose an advantageous deck per block
+values.total_gooddeck_block: 			number of times an advantageous deck was presented
+(same measures for disadvantageous blocks)
+
+expressions.netscore_block:				difference score of 'good-decisions' and 'bad-decisions' (overall performance measure, per block)
+
+
+
+<data>
+/file = "ModifiedIGT_rawdata.iqdat"
+/ columns = [date, time, subject, blockcode, blocknum, trialcode, trialnum, values.cardoffered, values.groupnumber, 
+					values.defaultresponse, values.targetdeck, 
+					response, values.response, latency, values.forcedwins1, values.forcedwins2, values.forcedwins3, values.forcedwins4,
+					values.gain, values.loss, values.netchange, expressions.feedback, values.currenttotal,
+					expressions.percent_goodplay_block, values.number_goodplay_block, values.total_gooddeck_block,
+					expressions.percent_badplay_block, values.number_badplay_block, values.total_baddeck_block,
+					expressions.netscore_block;
+					expressions.percent_goodplay, values.number_goodplay, values.total_gooddeck,
+					expressions.percent_badplay, values.number_badplay, values.total_baddeck;
+					expressions.netscore_total]
+/separatefiles = true
+</data>
+
+********************
+summary data
+********************
+script.elapsedtime:					time it took to run script (in ms)
+/completed:							0 = script was not completed; 1 = all conditions were run (script was completed)
+expressions.percent_goodplay:		percentage of play-response to advantageous decks across blocks
+expressions.percent_badplay:		percentage of play-response to disadvantageous decks across blocks
+expressions.netscore_total: 		difference score of 'good-decisions' and 'bad-decisions' (overall performance measure, across blocks)
+
+<summarydata >
+/file = "ModifiedIGT_summary.iqdat"
+/columns = [script.startdate, script.starttime, script.subjectid, script.elapsedtime, values.completed,
+			values.groupnumber, values.currenttotal,
+			expressions.percent_goodplay, expressions.percent_badplay, expressions.netscore_total]
+</summarydata>
+*******************************************************************************************************************
+*******************************************************************************************************************
+									REMAINING CODE: Customize after careful consideration only
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+**************************************************************************************************************
+**************************************************************************************************************
+DEFAULT SCREEN SETTING
+**************************************************************************************************************
+**************************************************************************************************************
+requires Inquisit 4.0.3.0
+
+<defaults>
+/ minimumversion = "4.0.3.0"
+/ inputdevice = mouse
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/canvasaspectratio = (4,3)
+</defaults>
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+VALUES: automatically changed
+**************************************************************************************************************
+**************************************************************************************************************
+
+***************
+the remaining parameters are updated automatically during runtime
+***************
+/completed:								0 = script was not completed; 1 = all conditions were run (script was completed)
+/previoustotal:							the previous amount of money owned
+/cardoffered:							adds the number of cards selected
+/gain:									stores the trial's gain depending on choice
+/loss:									stores the trial's loss depending on choice
+/groupnumber:							the groupnumber (1-4) the subject was randomly assigned to	
+										(=> 4 different placements of decks)
+/currentotal:							the amount of money currently owned			
+
+/arrowposition:							horizontal coordinate of current arrow
+/targetdeck:							the current targetdeck with an arrow
+/response:								1 = pass; 2 = play (if no response is given values.response evaluates to the defaultresponse)
+/netchange:								stores the current netchange in money won/lost
+/forcedwins:							current number of guaranteed wins that will occur when participant decides to 'play'
+
+across entire experiment:
+/number_goodplay:						number of times participant chose an advantageous deck
+/number_badplay:						number of times participant chose a disadvantageous deck
+/total_gooddeck:						number of times an advantageous deck was presented
+/total_baddeck:							number of times a disadvantageous deck was presented
+
+per block:
+/number_goodplay_block = 0
+/number_badplay_block = 0
+/total_gooddeck_block = 0
+/total_baddeck_block = 0
+
+<values>
+/ completed = 0
+/ previoustotal = 0
+/ cardoffered = 0
+/ gain = 0
+/ loss = 0
+/ groupnumber = 0
+/currenttotal = 0
+
+/arrowposition = 0
+/targetdeck = 0
+/response = 0
+/netchange = 0
+/forcedwins1 = values.number_forcedwins1
+/forcedwins2 = values.number_forcedwins2
+/forcedwins3 = values.number_forcedwins3
+/forcedwins4 = values.number_forcedwins4
+
+/number_goodplay = 0
+/number_badplay = 0
+/total_gooddeck = 0
+/total_baddeck = 0
+/number_goodplay_block = 0
+/number_badplay_block = 0
+/total_gooddeck_block = 0
+/total_baddeck_block = 0
+</values>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EXPRESSIONS
+**************************************************************************************************************
+**************************************************************************************************************
+/ getlossdeck1 - 
+/ getlossdeck4:				calculates the current loss for a played deck
+							as long as there are still trials left that should be win-trials, the loss is 0.
+							Once no more 'forced' win trials are left, the losses are controlled by the loss-lists
+
+/feedback:					determines the verbal feedback based on response and values.netchange
+
+DV:
+
+per block:
+/percent_goodplay_block:	percentage of play-response to advantageous decks
+/percent_badplay_block:		percentage of play-response to disadvantageous decks
+/netscore_block:			difference score of 'good-decisions' and 'bad-decisions' (overall performance measure)
+
+across all blocks:
+/percent_goodplay
+/percent_badplay
+/netscore_total
+
+<expressions>
+/ getlossdeck1 = if (values.forcedwins1 <= 0) list.deck1losses.nextvalue else 0
+/ getlossdeck2 = if (values.forcedwins2 <= 0) list.deck2losses.nextvalue else 0
+/ getlossdeck3 = if (values.forcedwins3 <= 0) list.deck3losses.nextvalue else 0
+/ getlossdeck4 = if (values.forcedwins4 <= 0) list.deck4losses.nextvalue else 0
+
+/feedback = if (values.response == 1 && values.netchange < 0) "Pierde $<%abs(values.netchange)%>";
+			if (values.response == 1 && values.netchange == 0) "No gana ni pierde dinero";
+			if (values.response == 1 && values.netchange > 0) "Gana $<%abs(values.netchange)%>"
+
+/percent_goodplay_block = (values.number_goodplay_block/values.total_gooddeck_block) * 100
+/percent_badplay_block = (values.number_badplay_block/values.total_baddeck_block) * 100
+/netscore_block = expressions.percent_goodplay_block - expressions.percent_badplay_block
+
+/percent_goodplay = (values.number_goodplay/values.total_gooddeck) * 100
+/percent_badplay = (values.number_badplay/values.total_baddeck) * 100
+/netscore_total = expressions.percent_goodplay - expressions.percent_badplay
+</expressions>
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	INSTRUCTIONS ELEMENTS
+**************************************************************************************************************
+**************************************************************************************************************
+<text igtinstructions>
+/ items = instructions
+/ select = 1
+/ position = (50%, 60%)
+/ fontstyle = ("Arial", 1.75%)
+/ size = (80%, 30%)
+/ hjustify = left
+/ valign = top
+</text>
+
+<trial instructions>
+/ stimulusframes = [1=igt, deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, igtinstructions, start]
+/ validresponse = (start)
+/ recorddata = false
+</trial>
+
+<block instructions>
+/ trials = [1=instructions]
+</block>
+**************************************************************************************************************
+**************************************************************************************************************
+	STIMULI
+**************************************************************************************************************
+**************************************************************************************************************
+<picture arrow>
+/ items = ("arrow.png")
+/ hposition = values.arrowposition
+/vposition = 25%
+/size = (10%, 10%)
+</picture>
+
+<text start>
+/ items = ("Iniciar")
+/ position = (50%, 90%)
+/ fontstyle = ("Arial", 3%, false, false, true, false, 5, 0)
+/ txcolor = blue
+</text>
+
+<text continue>
+/ items = ("Siguiente")
+/ position = (50%, 85%)
+/ fontstyle = ("Arial", 3%, false, false, true, false, 5, 0)
+/ txcolor = blue
+</text>
+
+<text netchange>
+/ items = ("<%expressions.feedback%>")
+/vposition = 55%
+/ valign = top
+/ fontstyle = ("Arial", 5%, false, false, false, false, 5, 0)
+</text>
+
+<text previoustotal>
+/ items = ("   Total Anterior: $<% values.previoustotal %>   ")
+/ position = (50%, 75%)
+/ erase = false
+/txcolor = gray
+</text>
+
+<text currenttotal>
+/ items = ("   Total Actual: $<% values.currenttotal %>   ")
+/ position = (50%, 70%)
+/ erase = false
+</text>
+
+<text igt>
+/ items = ("Iowa Gambling Test")
+/ position = (50%, 10%)
+/ fontstyle = ("Arial", 4%)
+/ erase = false
+</text>
+
+<picture deck1>
+/ items = ("deck.jpg")
+/ position = (20%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<text deck1label>
+/ items = ("Baraja 1")
+/ position = (20%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<picture deck2>
+/ items = ("deck.jpg")
+/ position = (40%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<text deck2label>
+/ items = ("Baraja 2")
+/ position = (40%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<picture deck3>
+/ items = ("deck.jpg")
+/ position = (60%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<text deck3label>
+/ items = ("Baraja 3")
+/ position = (60%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<picture deck4>
+/ items = ("deck.jpg")
+/ position = (80%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<text deck4label>
+/ items = ("Baraja 4")
+/ position = (80%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<picture deckon>
+/ items = ("deckon.jpg")
+/ erase = false
+</picture>
+**************************************************************************************************************
+**************************************************************************************************************
+	LISTS
+**************************************************************************************************************
+**************************************************************************************************************
+
+A deck is randomly selected from this list (without replacement) 
+=> 20 trials per block: each deck is selected 5 times
+<list currentdeck>
+/items = (1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
+/replace = false
+/resetinterval = 1
+</list>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	MAIN TRIALS
+**************************************************************************************************************
+**************************************************************************************************************
+- selects the targetdeck 
+- presents the choice btw play/pass for the predetermined amount of time (after that time response evaluates to values.defaultresponse)
+- updates several values depending on participant's response
+
+<trial igt>
+/ontrialbegin = [values.gain = 0; values.loss = 0; values.netchange = 0]
+/ontrialbegin = [values.targetdeck = list.currentdeck.nextvalue]
+/ontrialbegin = [if (values.targetdeck == 1) {values.arrowposition = picture.deck1.hposition; values.total_baddeck += 1; values.total_baddeck_block += 1}]
+/ontrialbegin = [if (values.targetdeck == 2) {values.arrowposition = picture.deck2.hposition; values.total_baddeck += 1; values.total_baddeck_block += 1}]
+/ontrialbegin = [if (values.targetdeck == 3) {values.arrowposition = picture.deck3.hposition; values.total_gooddeck += 1; values.total_gooddeck_block += 1}]
+/ontrialbegin = [if (values.targetdeck == 4) {values.arrowposition = picture.deck4.hposition; values.total_gooddeck += 1; values.total_gooddeck_block += 1}]
+
+/ ontrialbegin = [picture.deck1.item.1 = "deck.jpg"; picture.deck2.item.1 = "deck.jpg";  picture.deck3.item.1 = "deck.jpg"; picture.deck4.item.1 = "deck.jpg";]
+/ stimulusframes = [1=deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, arrow]
+/validresponse = (deck1, deck2, deck3, deck4)
+/timeout = values.decisiontime
+
+/ ontrialend = [ if (trial.igt.response == "deck1") {picture.deck1.item.1 = "deckon.jpg"; text.netchange.hposition = picture.deck1.hposition; values.gain=100; values.loss=expressions.getlossdeck1; values.previoustotal=values.currenttotal; values.currenttotal = values.currenttotal+values.gain-values.loss;}]
+/ ontrialend = [ if (trial.igt.response == "deck2") {picture.deck2.item.1 = "deckon.jpg"; text.netchange.hposition = picture.deck2.hposition; values.gain=100; values.loss=expressions.getlossdeck1; values.previoustotal=values.currenttotal; values.currenttotal = values.currenttotal+values.gain-values.loss;}]
+/ ontrialend = [ if (trial.igt.response == "deck3") {picture.deck3.item.1 = "deckon.jpg"; text.netchange.hposition = picture.deck3.hposition; values.gain=50; values.loss=expressions.getlossdeck3; values.previoustotal=values.currenttotal; values.currenttotal = values.currenttotal+values.gain-values.loss;}]
+/ ontrialend = [ if (trial.igt.response == "deck4") {picture.deck4.item.1 = "deckon.jpg"; text.netchange.hposition = picture.deck1.hposition; values.gain=50; values.loss=expressions.getlossdeck4; values.previoustotal=values.currenttotal; values.currenttotal = values.currenttotal+values.gain-values.loss;}]
+
+
+/ontrialend = [if (trial.igt.response == "play") values.response = 1]
+/ontrialend = [if (values.response == 0) values.response = values.defaultresponse]
+
+/ontrialend = [if (values.targetdeck == 1) text.netchange.hposition = picture.deck1.hposition]
+/ontrialend = [if (values.targetdeck == 2) text.netchange.hposition = picture.deck2.hposition]
+/ontrialend = [if (values.targetdeck == 3) text.netchange.hposition = picture.deck3.hposition]
+/ontrialend = [if (values.targetdeck == 4) text.netchange.hposition = picture.deck4.hposition]
+
+/ontrialend = [if (values.response == 1 && values.targetdeck ==1) {
+						picture.deck1.item.1 = "deckon.jpg";
+						values.number_badplay += 1; 
+						values.number_badplay_block += 1;
+						values.gain = list.deck1gains.nextvalue;
+						values.loss=expressions.getlossdeck1;
+						values.netchange = values.gain - values.loss;
+						values.previoustotal=values.currenttotal; 
+						values.forcedwins1 -= 1;
+						values.currenttotal += values.netchange}]
+/ontrialend = [if (values.response == 1 && values.targetdeck ==2) {
+						picture.deck2.item.1 = "deckon.jpg";
+						values.number_badplay += 1; 
+						values.number_badplay_block += 1;
+						values.gain = list.deck2gains.nextvalue;
+						values.loss=expressions.getlossdeck2;
+						values.netchange = values.gain - values.loss;
+						values.previoustotal=values.currenttotal; 
+						values.forcedwins2 -= 1;
+						values.currenttotal += values.netchange}]
+/ontrialend = [if (values.response == 1 && values.targetdeck ==3) {
+						picture.deck3.item.1 = "deckon.jpg";
+						values.number_goodplay += 1; 
+						values.number_goodplay_block += 1;
+						values.gain = list.deck3gains.nextvalue;
+						values.loss=expressions.getlossdeck3;
+						values.netchange = values.gain - values.loss;
+						values.previoustotal=values.currenttotal; 
+						values.forcedwins3 -= 1;
+						values.currenttotal +=values.netchange}]
+/ontrialend = [if (values.response == 1 && values.targetdeck ==4) {
+						picture.deck4.item.1 = "deckon.jpg";
+						values.number_goodplay += 1; 
+						values.number_goodplay_block += 1;
+						values.gain = list.deck4gains.nextvalue;
+						values.loss=expressions.getlossdeck4;
+						values.netchange = values.gain - values.loss;
+						values.previoustotal=values.currenttotal; 
+						values.forcedwins4 -= 1;
+						values.currenttotal += values.netchange}]
+						
+/ontrialend = [if (values.netchange < 0) text.netchange.textcolor = red else text.netchange.textcolor = green]
+/branch = [trial.igt_feedback]
+</trial>
+
+- presents the feedback under the current targetdeck and updates currentotal and previoustotal on screen
+<trial igt_feedback>
+/ stimulusframes = [1=deck1, deck2, deck3, deck4, netchange, previoustotal, currenttotal, continue]
+/ validresponse = (continue)
+/ recorddata = false
+</trial>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	MAIN BLOCK
+**************************************************************************************************************
+**************************************************************************************************************
+
+- plays 20 trials per block
+<block igt>
+/onblockbegin = [values.number_badplay_block = 0; values.number_goodplay_block = 0; 
+				values.total_baddeck_block = 0; values.total_gooddeck_block = 0]
+/trials = [1-24 = igt]
+</block>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EXPERIMENT
+**************************************************************************************************************
+**************************************************************************************************************
+- Randomly assigns participant to one of four possible screen orders of the losing (1, 2) and winning (3, 4) decks.
+- plays 6 blocks of block.igt
+
+<expt main>
+/onexptbegin = [values.currenttotal = values.startamount]
+/ onexptbegin = [values.groupnumber = random(1, 2, 3, 4)]
+/ onexptbegin = [if ( values.groupnumber == 1) { picture.deck1.hposition = 20%; picture.deck2.hposition = 40%; picture.deck3.hposition = 60%; picture.deck4.hposition = 80%;}]
+/ onexptbegin = [if ( values.groupnumber == 2) { picture.deck1.hposition = 40%; picture.deck2.hposition = 80%; picture.deck3.hposition = 20%; picture.deck4.hposition = 60%;}]
+/ onexptbegin = [if ( values.groupnumber == 3) { picture.deck1.hposition = 80%; picture.deck2.hposition = 60%; picture.deck3.hposition = 40%; picture.deck4.hposition = 20%;}]
+/ onexptbegin = [if ( values.groupnumber == 4) { picture.deck1.hposition = 60%; picture.deck2.hposition = 20%; picture.deck3.hposition = 80%; picture.deck4.hposition = 40%;}]
+
+/ blocks = [1=instructions; 2=igt]
+/onexptend = [values.completed = 1]
+</expt>
+
+**************************************************************************************************************
+**************************************************************************************************************
+														End of Script
+**************************************************************************************************************
+**************************************************************************************************************
