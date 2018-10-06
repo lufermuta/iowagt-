@@ -205,7 +205,7 @@ probability of a loss: 10% => if /replace = false, the lose frequency rate acros
 probablity of a zero payoff: 0%
 expected win: -$25 (LOSS)
 <list deck2losses>
-/items = (0, 0, 0, 0, 0, 1250)
+/items = (0, 0, 0, 0, 0, 1200)
 /replace = false
 / resetinterval = 6
 </list>
