@@ -385,6 +385,7 @@ A deck is randomly selected from this list (without replacement)
 **************************************************************************************************************
 **************************************************************************************************************
 <trial igt>
+1!
 /ontrialbegin = [values.targetdeck = list.currentdeck.nextvalue]
 /ontrialbegin = [if (values.targetdeck == 1) {values.arrowposition = picture.deck1.hposition; values.number_badplay += 1}]
 /ontrialbegin = [if (values.targetdeck == 2) {values.arrowposition = picture.deck2.hposition; values.number_badplay += 1}]
