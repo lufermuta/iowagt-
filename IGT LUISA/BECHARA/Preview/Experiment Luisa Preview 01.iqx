@@ -681,11 +681,7 @@ A deck is randomly selected from this list (without replacement)
 
 <expt main>
 /onexptbegin = [values.currenttotal = values.startamount]
-/ onexptbegin = [values.groupnumber = random(1, 2, 3, 4)]
-/ onexptbegin = [if ( values.groupnumber == 1) { picture.deck1.hposition = 20%; picture.deck2.hposition = 40%; picture.deck3.hposition = 60%; picture.deck4.hposition = 80%;}]
-/ onexptbegin = [if ( values.groupnumber == 2) { picture.deck1.hposition = 40%; picture.deck2.hposition = 80%; picture.deck3.hposition = 20%; picture.deck4.hposition = 60%;}]
-/ onexptbegin = [if ( values.groupnumber == 3) { picture.deck1.hposition = 80%; picture.deck2.hposition = 60%; picture.deck3.hposition = 40%; picture.deck4.hposition = 20%;}]
-/ onexptbegin = [if ( values.groupnumber == 4) { picture.deck1.hposition = 60%; picture.deck2.hposition = 20%; picture.deck3.hposition = 80%; picture.deck4.hposition = 40%;}]
+/ onexptbegin = [if ( values.groupnumber == 1) { picture.deck1.hposition = 60%; picture.deck2.hposition = 20%; picture.deck3.hposition = 80%; picture.deck4.hposition = 40%;}]
 
 / blocks = [1=instructions; 2=igt]
 /onexptend = [values.completed = 1]
