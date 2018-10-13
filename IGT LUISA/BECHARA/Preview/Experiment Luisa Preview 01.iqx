@@ -75,14 +75,7 @@ cards are NOT a returned to the deck" (therefore turning probabilities into actu
 *********************************************
 *******************************************************************
 
-/playkey: 								scancode of 'play' key (default: 30 -> a)
-/passkey:								scancode of 'pass' key (default: 38 -> l)
-/playkey_label:							description of play key
-/passkey_label:							description of pass key
-
 /decisiontime :							time participant has to decide (default: 4000ms)
-/defaultresponse:						if no response occurs, 	defaultresponse = 1 => 'Pass' response
-																defaultresponse = 2 => 'Play' response
 
 /number_forcedwins1-					sets the number of definite wins for each deck that occur during the initial trials for that deck
 /number_forcedwins4						Example: 
@@ -293,9 +286,8 @@ expressions.netscore_block:				difference score of 'good-decisions' and 'bad-dec
 /file = "ModifiedIGT_rawdata.iqdat"
 / columns = [date, time, subject, blockcode, blocknum, trialcode, trialnum, values.cardoffered, values.groupnumber, 
 					values.defaultresponse, values.targetdeck, 
-					response, values.response, latency, values.forcedwins1, values.forcedwins2, values.forcedwins3, values.forcedwins4,
-					values.gain, values.loss, values.netchange, expressions.feedback, values.currenttotal,
-					expressions.percent_goodplay_block, values.number_goodplay_block, values.total_gooddeck_block,
+					response, values.response, latency,	values.gain, values.loss, values.netchange, expressions.feedback, values.currenttotal,
+					values.number_goodplay_block, values.total_gooddeck_block,
 					expressions.percent_badplay_block, values.number_badplay_block, values.total_baddeck_block,
 					expressions.netscore_block;
 					expressions.percent_goodplay, values.number_goodplay, values.total_gooddeck,
@@ -433,6 +425,12 @@ across all blocks:
 / getlossdeck2 = if (values.forcedwins2 <= 0) list.deck2losses.nextvalue else 0
 / getlossdeck3 = if (values.forcedwins3 <= 0) list.deck3losses.nextvalue else 0
 / getlossdeck4 = if (values.forcedwins4 <= 0) list.deck4losses.nextvalue else 0
+
+/ newtotal = values.currenttotal+values.gain-values.loss
+/ isgain = values.gain > values.loss
+/ isloss = values.loss > values.gain
+/ iseven = values.loss == values.gain
+
 
 /feedback = if (values.response == 1 && values.netchange < 0) "Pierde $<%abs(values.netchange)%>";
 			if (values.response == 1 && values.netchange == 0) "No gana ni pierde dinero";
@@ -585,6 +583,18 @@ across all blocks:
 / erase = false
 </text>
 
+
+<picture deckgain>
+/ items = ("deckgain.jpg")
+/ erase = false
+</picture>
+
+
+<picture deckloss>
+/ items = ("deckloss.jpg")
+/ erase = false
+</picture>
+
 <picture deckon>
 / items = ("deckon.jpg")
 / erase = false
@@ -625,10 +635,10 @@ A deck is randomly selected from this list (without replacement)
 /validresponse = (deck1, deck2, deck3, deck4)
 /timeout = values.decisiontime
 
-/ ontrialend = [ if (trial.igt.response == "deck1") {picture.deck1.item.1 = "deckon.jpg"; text.netchange.hposition = picture.deck1.hposition; values.gain=100; values.loss=expressions.getlossdeck1; values.previoustotal=values.currenttotal; values.currenttotal = values.currenttotal+values.gain-values.loss;}]
-/ ontrialend = [ if (trial.igt.response == "deck2") {picture.deck2.item.1 = "deckon.jpg"; text.netchange.hposition = picture.deck2.hposition; values.gain=100; values.loss=expressions.getlossdeck1; values.previoustotal=values.currenttotal; values.currenttotal = values.currenttotal+values.gain-values.loss;}]
-/ ontrialend = [ if (trial.igt.response == "deck3") {picture.deck3.item.1 = "deckon.jpg"; text.netchange.hposition = picture.deck3.hposition; values.gain=50; values.loss=expressions.getlossdeck3; values.previoustotal=values.currenttotal; values.currenttotal = values.currenttotal+values.gain-values.loss;}]
-/ ontrialend = [ if (trial.igt.response == "deck4") {picture.deck4.item.1 = "deckon.jpg"; text.netchange.hposition = picture.deck1.hposition; values.gain=50; values.loss=expressions.getlossdeck4; values.previoustotal=values.currenttotal; values.currenttotal = values.currenttotal+values.gain-values.loss;}]
+/ ontrialend = [ if (values.response == 1 && values.targetdeck ==1) {values.gain=100; values.loss=expressions.getlossdeck1; text.netchange.hposition = picture.deck1.hposition; values.netchange = values.gain - values.loss; values.previoustotal=values.currenttotal; values.number_badplay += 1; values.number_badplay_block += 1; values.gain = list.deck1gains.nextvalue; values.forcedwins1 -= 1; values.currenttotal += values.netchange;  if (values.netchange > 0) picture.deck1.item.1 = "deckgain.jpg"; if (values.netchange < 0) picture.deck1.item.1 = "deckloss.jpg"; if (values.netchange == 0) picture.deck1.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (values.response == 1 && values.targetdeck ==2) {values.gain=100; values.loss=expressions.getlossdeck2; text.netchange.hposition = picture.deck2.hposition; values.netchange = values.gain - values.loss; values.previoustotal=values.currenttotal; values.number_badplay += 1; values.number_badplay_block += 1; values.gain = list.deck2gains.nextvalue; values.forcedwins1 -= 1; values.currenttotal += values.netchange;  if (values.netchange > 0) picture.deck2.item.1 = "deckgain.jpg"; if (values.netchange < 0) picture.deck2.item.1 = "deckloss.jpg"; if (values.netchange == 0) picture.deck2.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (values.response == 1 && values.targetdeck ==3) {values.gain=50; values.loss=expressions.getlossdeck3; text.netchange.hposition = picture.deck3.hposition; values.netchange = values.gain - values.loss; values.previoustotal=values.currenttotal; values.number_goodplay += 1; values.number_goodplay_block += 1; values.gain = list.deck3gains.nextvalue; values.forcedwins1 -= 1; values.currenttotal += values.netchange;  if (values.netchange > 0) picture.deck3.item.1 = "deckgain.jpg"; if (values.netchange < 0) picture.deck3.item.1 = "deckloss.jpg"; if (values.netchange == 0) picture.deck3.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (values.response == 1 && values.targetdeck ==4) {false; values.gain=50; values.loss=expressions.getlossdeck4; text.netchange.hposition = picture.deck4.hposition; values.netchange = values.gain - values.loss; values.previoustotal=values.currenttotal; values.number_goodplay += 1; values.number_goodplay_block += 1; values.gain = list.deck4gains.nextvalue; values.forcedwins1 -= 1; values.currenttotal += values.netchange;  if (values.netchange > 0) picture.deck4.item.1 = "deckgain.jpg"; if (values.netchange < 0) picture.deck4.item.1 = "deckloss.jpg"; if (values.netchange == 0) picture.deck4.item.1 = "deckon.jpg"}]
 
 /ontrialend = [if (values.response == 0) values.response = values.defaultresponse]
 
@@ -637,47 +647,6 @@ A deck is randomly selected from this list (without replacement)
 /ontrialend = [if (values.targetdeck == 3) text.netchange.hposition = picture.deck3.hposition]
 /ontrialend = [if (values.targetdeck == 4) text.netchange.hposition = picture.deck4.hposition]
 
-/ontrialend = [if (values.response == 1 && values.targetdeck ==1) {
-						picture.deck1.item.1 = "deckon.jpg";
-						values.number_badplay += 1; 
-						values.number_badplay_block += 1;
-						values.gain = list.deck1gains.nextvalue;
-						values.loss=expressions.getlossdeck1;
-						values.netchange = values.gain - values.loss;
-						values.previoustotal=values.currenttotal; 
-						values.forcedwins1 -= 1;
-						values.currenttotal += values.netchange}]
-/ontrialend = [if (values.response == 1 && values.targetdeck ==2) {
-						picture.deck2.item.1 = "deckon.jpg";
-						values.number_badplay += 1; 
-						values.number_badplay_block += 1;
-						values.gain = list.deck2gains.nextvalue;
-						values.loss=expressions.getlossdeck2;
-						values.netchange = values.gain - values.loss;
-						values.previoustotal=values.currenttotal; 
-						values.forcedwins2 -= 1;
-						values.currenttotal += values.netchange}]
-/ontrialend = [if (values.response == 1 && values.targetdeck ==3) {
-						picture.deck3.item.1 = "deckon.jpg";
-						values.number_goodplay += 1; 
-						values.number_goodplay_block += 1;
-						values.gain = list.deck3gains.nextvalue;
-						values.loss=expressions.getlossdeck3;
-						values.netchange = values.gain - values.loss;
-						values.previoustotal=values.currenttotal; 
-						values.forcedwins3 -= 1;
-						values.currenttotal +=values.netchange}]
-/ontrialend = [if (values.response == 1 && values.targetdeck ==4) {
-						picture.deck4.item.1 = "deckon.jpg";
-						values.number_goodplay += 1; 
-						values.number_goodplay_block += 1;
-						values.gain = list.deck4gains.nextvalue;
-						values.loss=expressions.getlossdeck4;
-						values.netchange = values.gain - values.loss;
-						values.previoustotal=values.currenttotal; 
-						values.forcedwins4 -= 1;
-						values.currenttotal += values.netchange}]
-						
 /ontrialend = [if (values.netchange < 0) text.netchange.textcolor = red else text.netchange.textcolor = green]
 /branch = [trial.igt_feedback]
 </trial>
