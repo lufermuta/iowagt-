@@ -405,6 +405,7 @@ per block:
 / getlossdeck4:				calculates the current loss for a played deck
 							as long as there are still trials left that should be win-trials, the loss is 0.
 							Once no more 'forced' win trials are left, the losses are controlled by the loss-lists
+							Las perdidas se generan en el orden de la lista, la lista sale de la descripcion de Beachara & Damasio (1994)
 
 /feedback:					determines the verbal feedback based on response and values.netchange
 

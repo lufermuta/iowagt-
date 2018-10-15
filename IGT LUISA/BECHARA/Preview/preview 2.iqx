@@ -8,9 +8,9 @@
 **************************************************************************************************************
 												SCRIPT INFO
 
-last updated: 13-10-2018
+last updated: 15-10-2018
 
-updated for Luisa Muñoz, based on: Inquisit 4.0 by K. Borchert (katjab@millisecond.com) for Millisecond Software LLC
+updated for Luisa Munoz (lmunozt@unal.edu.co), based on: Inquisit 4.0 by K. Borchert (katjab@millisecond.com) for Millisecond Software LLC
 Copyright ©  09-12-2013 Millisecond Software
 **************************************************************************************************************
 **************************************************************************************************************
@@ -59,9 +59,10 @@ Editable Instructions
 NOTE: instructions can be changed here:
 
 <item instructions>
-/ 1 = "En este juego, su objetivo es ganar tanto dinero como sea posible. 
+/ 1 = "En este juego, su objetivo es ganar tanto dinero como sea posible, en cada ronda, una flecha amarilla encima de una de las cuatro barajas, le indicará la carta que debe seleccionar.
 
-Para cada ronda, una flecha amarilla encima de una de las cuatro barajas, le indicará la carta que debe seleccionar.
+Puede seleccionar una carta haciendo clic con el mouse sobre una de las barajas.
+
 Con cada carta seleccionada, puede ganar, perder o ni ganar ni perder dinero.
 Algunas barajas serán más rentables que otras.
 
@@ -113,6 +114,8 @@ number_badplay:							number of times participant chose a disadvantageous deck
 /targetdeck = 0
 /number_goodplay = 0
 /number_badplay = 0
+/netchange = 0
+
 </values>
 **************************************************************************************************************
 **************************************************************************************************************
@@ -121,14 +124,14 @@ number_badplay:							number of times participant chose a disadvantageous deck
 **************************************************************************************************************
 / getlossdeck1 - 
 / getlossdeck4:				calculates the current loss for a played deck
-							losses are selected randomly without replacement 
+							Las perdidas se generan en el orden de la lista, la lista sale de la descripcion de Pace-Scott (2012)
 							=> across 10 trials per deck, you will see the following losses:
 
 <expressions>
-/ getlossdeck1 = noreplace(0, 0, 0, 0, 0, 1250)
-/ getlossdeck2 = noreplace(0, 0, 0, 250, 300, 350)
-/ getlossdeck3 = noreplace(0, 0, 0, 50, 50, 50)
-/ getlossdeck4 = noreplace(0, 0, 0, 0, 0, 250)
+/ getlossdeck1 = sequence(0, 0, 750, 0, 0, 0)
+/ getlossdeck2 = sequence(0, 150, 0, 350, 0, 250)
+/ getlossdeck3 = sequence(0, 75, 50, 0, 25, 0)
+/ getlossdeck4 = sequence(0, 0, 0, 0, 250, 0)
 / newtotal = values.currenttotal+values.gain-values.loss
 / isgain = values.gain > values.loss
 / isloss = values.loss > values.gain
@@ -152,13 +155,18 @@ response:						the participant's response
 latency: 						the trial latency
 values.gain:					stores the trial's gain depending on choice
 values.loss:					stores the trial's loss depending on choice
-values.currenttotal:			stores the current amount of money won		
+values.currenttotal:			stores the current amount of money won
+values.number_badplay			number of times participant chose a disadvantageous deck
+values.number_goodplay			number of times participant chose a advantageous deck
+
+
+					
 
 
 <data>
 /file = "IowaGamblingTask_rawdata.iqdat"
 / columns = [date, time, subject, values.cardsselected, values.groupnumber, response, latency, 
-					values.gain, values.loss, values.currenttotal]
+					values.gain, values.loss, values.currenttotal, values.number_badplay, values.number_goodplay]
 /separatefiles = true
 </data>
 
@@ -356,11 +364,13 @@ values.groupnumber, values.currenttotal]
 
 <sound win>
 / items = ("sosumi.wav")
+/playthrough = false
 / pan = 0
 </sound>
 
 <sound loser>
 / items = ("quack.wav")
+/playthrough = false
 / pan = 0
 </sound>
 
@@ -385,7 +395,7 @@ A deck is randomly selected from this list (without replacement)
 **************************************************************************************************************
 **************************************************************************************************************
 <trial igt>
-1!
+
 /ontrialbegin = [values.targetdeck = list.currentdeck.nextvalue]
 /ontrialbegin = [if (values.targetdeck == 1) {values.arrowposition = picture.deck1.hposition; values.number_badplay += 1}]
 /ontrialbegin = [if (values.targetdeck == 2) {values.arrowposition = picture.deck2.hposition; values.number_badplay += 1}]
@@ -397,16 +407,18 @@ A deck is randomly selected from this list (without replacement)
 / validresponse = (deck1, deck2, deck3, deck4)
 / branch = [if (true) trial.igtfeedback]
 / ontrialend = [values.cardsselected += 1]
-/ ontrialend = [ if (trial.igt.response == "deck1") { values.gain=100; values.loss=expressions.getlossdeck1; text.gain.hposition=picture.deck1.hposition; text.loss.hposition=picture.deck1.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) picture.deck1.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck1.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck1.item.1 = "deckon.jpg"; if (expressions.isgain) sound.win; if (expressions.isloss) sound.loser}]
-/ ontrialend = [ if (trial.igt.response == "deck2") { values.gain=100; values.loss=expressions.getlossdeck2; text.gain.hposition=picture.deck2.hposition; text.loss.hposition=picture.deck2.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) picture.deck2.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck2.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck2.item.1 = "deckon.jpg"; if (expressions.isgain) sound.win; if (expressions.isloss) sound.loser}]
-/ ontrialend = [ if (trial.igt.response == "deck3") { values.gain=50; values.loss=expressions.getlossdeck3;  text.gain.hposition=picture.deck3.hposition; text.loss.hposition=picture.deck3.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) picture.deck3.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck3.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck3.item.1 = "deckon.jpg"; if (expressions.isgain) sound.win; if (expressions.isloss) sound.loser}]
-/ ontrialend = [ if (trial.igt.response == "deck4") { values.gain=50; values.loss=expressions.getlossdeck4;  text.gain.hposition=picture.deck4.hposition; text.loss.hposition=picture.deck4.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) picture.deck4.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck4.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck4.item.1 = "deckon.jpg"; if (expressions.isgain) sound.win; if (expressions.isloss) sound.loser}]
+/ ontrialend = [ if (trial.igt.response == "deck1") { values.gain=100; values.loss=expressions.getlossdeck1; text.gain.hposition=picture.deck1.hposition; text.loss.hposition=picture.deck1.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) {picture.deck1.item.1 = "deckgain.jpg"; sound.win.playthrough}; if (expressions.isloss) {picture.deck1.item.1 = "deckloss.jpg"; sound.loser.playthrough}; if (expressions.iseven) picture.deck1.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (trial.igt.response == "deck2") { values.gain=100; values.loss=expressions.getlossdeck2; text.gain.hposition=picture.deck2.hposition; text.loss.hposition=picture.deck2.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) {picture.deck2.item.1 = "deckgain.jpg"; sound.win.playthrough}; if (expressions.isloss) {picture.deck2.item.1 = "deckloss.jpg"; sound.loser.playthrough}; if (expressions.iseven) picture.deck2.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (trial.igt.response == "deck3") { values.gain=50; values.loss=expressions.getlossdeck3;  text.gain.hposition=picture.deck3.hposition; text.loss.hposition=picture.deck3.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) {picture.deck3.item.1 = "deckgain.jpg"; sound.win.playthrough}; if (expressions.isloss) {picture.deck3.item.1 = "deckloss.jpg"; sound.loser.playthrough}; if (expressions.iseven) picture.deck3.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (trial.igt.response == "deck4") { values.gain=50; values.loss=expressions.getlossdeck4;  text.gain.hposition=picture.deck4.hposition; text.loss.hposition=picture.deck4.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) {picture.deck4.item.1 = "deckgain.jpg"; sound.win.playthrough}; if (expressions.isloss) {picture.deck4.item.1 = "deckloss.jpg"; sound.loser.playthrough}; if (expressions.iseven) picture.deck4.item.1 = "deckon.jpg"}]
+/ branch = [if (expressions.isgain) sound.win.playthrough]
+/ branch = [if (expressions.isloss) sound.loser.playthrough]
 
 </trial>
 
 
 <trial igtfeedback>
-/ stimulusframes = [1=deck1, deck2, deck3, deck4, gain, loss, win, loser, previoustotal, currenttotal, cardsselected, continue]
+/ stimulusframes = [1=deck1, deck2, deck3, deck4, gain, loss, previoustotal, currenttotal, cardsselected, win, loser, continue]
 / validresponse = (continue)
 / recorddata = false
 </trial>

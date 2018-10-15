@@ -8,9 +8,9 @@
 **************************************************************************************************************
 												SCRIPT INFO
 
-last updated: 13-10-2018
+last updated: 15-10-2018
 
-updated for Inquisit 4.0 by K. Borchert (katjab@millisecond.com) for Millisecond Software LLC
+updated for Luisa Munoz (lmunozt@unal.edu.co), based on: Inquisit 4.0 by K. Borchert (katjab@millisecond.com) for Millisecond Software LLC
 
 Copyright ©  09-12-2013 Millisecond Software
 **************************************************************************************************************
@@ -118,10 +118,10 @@ groupnumber:							the groupnumber (1-4) the subject was randomly assigned to
 							=> across 10 trials per deck, you will see the following losses:
 
 <expressions>
-/ getlossdeck1 = noreplace(0, 0, 0, 0, 0, 0, 0, 0, 0, 1250)
-/ getlossdeck2 = noreplace(0, 0, 0, 0, 0, 150, 200, 250, 300, 350)
-/ getlossdeck3 = noreplace(0, 0, 0, 0, 0, 50, 50, 50, 50, 50)
-/ getlossdeck4 = noreplace(0, 0, 0, 0, 0, 0, 0, 0, 0, 250)
+/ getlossdeck1 = sequence(0, 0, 0, 0, 0, 0, 0, 0, 1250, 0, 0, 0, 0, 1250, 0, 0, 0, 0, 0, 0, 1250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+/ getlossdeck2 = sequence(0, 0, 150, 0, 300, 0, 200, 0, 250, 350, 0, 350, 0, 250, 200, 0, 300, 150, 0, 0, 0, 300, 0, 350, 0, 200, 250, 150, 0, 0, 350, 200, 250, 0, 0, 0, 150, 300, 0, 0)
+/ getlossdeck3 = sequence(0, 0, 50, 0, 50, 0, 50, 0, 50, 50, 0, 25, 75, 0, 0, 0, 25, 75, 0, 50, 0, 0, 0, 50, 25, 50, 0, 0, 75, 50, 0, 0, 0, 25, 25, 0, 75, 0, 50, 75)
+/ getlossdeck4 = sequence(0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0)
 / newtotal = values.currenttotal+values.gain-values.loss
 / isgain = values.gain > values.loss
 / isloss = values.loss > values.gain
@@ -184,7 +184,7 @@ values.groupnumber, values.currenttotal]
 / items = instructions
 / select = 1
 / position = (50%, 60%)
-/ fontstyle = ("Arial", 1.75%)
+/ fontstyle = ("Arial", 2%)
 / size = (80%, 30%)
 / hjustify = left
 / valign = top
@@ -339,6 +339,19 @@ values.groupnumber, values.currenttotal]
 / items = ("deckloss.jpg")
 / erase = false
 </picture>
+
+<sound win>
+/ items = ("sosumi.wav")
+/ playthrough = false
+/ pan = 0
+</sound>
+
+<sound loser>
+/ items = ("quack.wav")
+/ playthrough = false
+/ pan = 0
+</sound>
+
 **************************************************************************************************************
 **************************************************************************************************************
 	MAIN TRIALS
