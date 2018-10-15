@@ -106,6 +106,10 @@ groupnumber:							the groupnumber (1-4) the subject was randomly assigned to
 / gain = 0
 / loss = 0
 / groupnumber = 0
+/number_goodplay = 0
+/number_badplay = 0
+/netscore = 0
+
 </values>
 **************************************************************************************************************
 **************************************************************************************************************
@@ -126,6 +130,9 @@ groupnumber:							the groupnumber (1-4) the subject was randomly assigned to
 / isgain = values.gain > values.loss
 / isloss = values.loss > values.gain
 / iseven = values.loss == values.gain
+/ goodplay = values.number_goodplay
+/ badplay = values.number_badplay
+/ netscore = values.number_goodplay - values.number_badplay
 </expressions>
 
 **************************************************************************************************************
@@ -151,7 +158,7 @@ values.currenttotal:			stores the current amount of money won
 <data>
 /file = "IowaGamblingTask_rawdata.iqdat"
 / columns = [date, time, subject, values.cardsselected, values.groupnumber, response, latency, 
-					values.gain, values.loss, values.currenttotal]
+					values.gain, values.loss, values.currenttotal, values.number_badplay, values.number_goodplay, values.netscore]
 /separatefiles = true
 </data>
 
@@ -359,14 +366,15 @@ values.groupnumber, values.currenttotal]
 **************************************************************************************************************
 <trial igt>
 / ontrialbegin = [picture.deck1.item.1 = "deck.jpg"; picture.deck2.item.1 = "deck.jpg";  picture.deck3.item.1 = "deck.jpg"; picture.deck4.item.1 = "deck.jpg";]
+
 / stimulusframes = [1=deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, selectinstructions]
 / validresponse = (deck1, deck2, deck3, deck4)
 / branch = [if (true) trial.igtfeedback]
 / ontrialend = [values.cardsselected += 1]
-/ ontrialend = [ if (trial.igt.response == "deck1") { values.gain=100; values.loss=expressions.getlossdeck1; text.gain.hposition=picture.deck1.hposition; text.loss.hposition=picture.deck1.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) picture.deck1.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck1.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck1.item.1 = "deckon.jpg"}]
-/ ontrialend = [ if (trial.igt.response == "deck2") { values.gain=100; values.loss=expressions.getlossdeck2; text.gain.hposition=picture.deck2.hposition; text.loss.hposition=picture.deck2.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) picture.deck2.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck2.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck2.item.1 = "deckon.jpg"}]
-/ ontrialend = [ if (trial.igt.response == "deck3") { values.gain=50; values.loss=expressions.getlossdeck3;  text.gain.hposition=picture.deck3.hposition; text.loss.hposition=picture.deck3.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) picture.deck3.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck3.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck3.item.1 = "deckon.jpg"}]
-/ ontrialend = [ if (trial.igt.response == "deck4") { values.gain=50; values.loss=expressions.getlossdeck4;  text.gain.hposition=picture.deck4.hposition; text.loss.hposition=picture.deck4.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; if (expressions.isgain) picture.deck4.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck4.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck4.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (trial.igt.response == "deck1") { values.gain=100; values.loss=expressions.getlossdeck1; text.gain.hposition=picture.deck1.hposition; text.loss.hposition=picture.deck1.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_badplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck1.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck1.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck1.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (trial.igt.response == "deck2") { values.gain=100; values.loss=expressions.getlossdeck2; text.gain.hposition=picture.deck2.hposition; text.loss.hposition=picture.deck2.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_badplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck2.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck2.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck2.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (trial.igt.response == "deck3") { values.gain=50; values.loss=expressions.getlossdeck3;  text.gain.hposition=picture.deck3.hposition; text.loss.hposition=picture.deck3.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_goodplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck3.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck3.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck3.item.1 = "deckon.jpg"}]
+/ ontrialend = [ if (trial.igt.response == "deck4") { values.gain=50; values.loss=expressions.getlossdeck4;  text.gain.hposition=picture.deck4.hposition; text.loss.hposition=picture.deck4.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_goodplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck4.item.1 = "deckgain.jpg"; if (expressions.isloss) picture.deck4.item.1 = "deckloss.jpg"; if (expressions.iseven) picture.deck4.item.1 = "deckon.jpg"}]
 </trial>
 
 <trial igtfeedback>
