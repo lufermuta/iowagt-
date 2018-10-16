@@ -1,0 +1,415 @@
+﻿**************************************************************************************************************
+**************************************************************************************************************
+											IOWA GAMBLING TASK
+**************************************************************************************************************
+**************************************************************************************************************
+
+**************************************************************************************************************
+**************************************************************************************************************
+												SCRIPT INFO
+
+last updated: 15-10-2018
+
+updated for Luisa Munoz (lmunozt@unal.edu.co), based on: Inquisit 4.0 by K. Borchert (katjab@millisecond.com) for Millisecond Software LLC
+
+Copyright ©  09-12-2013 Millisecond Software
+**************************************************************************************************************
+**************************************************************************************************************
+											 BACKGROUND INFO
+**************************************************************************************************************
+**************************************************************************************************************
+This sample script shows how to implement the Iowa Gambling Task as described in:
+
+Bechara A., Damasio A. R., Damasio H., Anderson S. W. (1994). 
+Insensitivity to future consequences following damage to human prefrontal cortex. Cognition, 50, 7-15 .
+
+
+
+EDITABLE CODE:
+check under EDITABLE CODE for (relatively) easily editable values, stimuli, instructions etc. 
+Keep in mind that you can use this script as a template and therefore always "mess" with the entire code to 
+further customize your experiment.
+
+If you have any questions, please don't hesitate to contact Millisecond Software.
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+EDITABLE CODE: The code in this section can be easily altered (look for extra instructions were applicable)
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+***************************************************************************************
+*********************************************
+Editable Values
+*********************************************
+***************************************************************************************
+/ currenttotal:							the amount of money currently owned
+											startamount (default) = 2000
+/showcardinfo:							shows information about number of cards played/how many more to come
+
+<values>
+/ currenttotal = 2000
+/showcardinfo = true
+</values>
+
+***************************************************************************************
+*********************************************
+Editable Instructions
+*********************************************
+***************************************************************************************
+NOTE: instructions can be changed here:
+
+<item instructions>
+/ 1 = "En este juego, se le solicitará repetidamente que seleccione una carta de una de las cuatro barajas disponibles. Puede seleccionar una carta haciendo clic con el mouse sobre una de las barajas.
+
+Con cada carta, puede ganar o perder algo de dinero. Algunas barajas serán más rentables que otras. Intente elegir cartas de las barajas más rentables para que sus ganancias totales sean lo más altas posible. 
+
+Usted tendrá <% block.igt.trialscount%> posibilidades de seleccionar una carta del mazo que crea que le dará las mayores ganancias. Sus ganancias totales y la cantidad de tarjetas seleccionadas se mostrarán en la pantalla. 
+
+Usted iniciará con $<%values.currenttotal%>. Haga clic en ~"Iniciar~" para comenzar."
+/ 2 = "Seleccione una carta."
+</item>
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DEFAULT SCREEN SETTING
+**************************************************************************************************************
+**************************************************************************************************************
+requires Inquisit 4.0.0.0
+
+<defaults>
+/ minimumversion = "4.0.0.0"
+/ inputdevice = mouse
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/canvasaspectratio = (4,3)
+</defaults>
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	VALUES: automatically updated
+**************************************************************************************************************
+**************************************************************************************************************
+
+completed: 								0 = script was not completed (script was prematurely aborted); 1 = script was completed (all conditions run)
+previoustotal:							the previous amount of money owned
+cardselected:							adds the number of cards selected
+gain:										stores the trial's gain depending on choice
+loss:										stores the trial's loss depending on choice
+groupnumber:							the groupnumber (1-4) the subject was randomly assigned to					
+
+<values>
+/completed = 0
+/ previoustotal = 0
+/ cardsselected = 0
+/ gain = 0
+/ loss = 0
+/ groupnumber = 0
+/number_goodplay = 0
+/number_badplay = 0
+/netscore = 0
+
+</values>
+**************************************************************************************************************
+**************************************************************************************************************
+	EXPRESSIONS
+**************************************************************************************************************
+**************************************************************************************************************
+/ getlossdeck1 - 
+/ getlossdeck4:				calculates the current loss for a played deck
+							losses are selected randomly without replacement 
+							=> across 10 trials per deck, you will see the following losses:
+
+<expressions>
+/ getlossdeck1 = sequence(0, 0, 0, 0, 0, 0, 0, 0, 1250, 0, 0, 0, 0, 1250, 0, 0, 0, 0, 0, 0, 1250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+/ getlossdeck2 = sequence(0, 0, 150, 0, 300, 0, 200, 0, 250, 350, 0, 350, 0, 250, 200, 0, 300, 150, 0, 0, 0, 300, 0, 350, 0, 200, 250, 150, 0, 0, 350, 200, 250, 0, 0, 0, 150, 300, 0, 0)
+/ getlossdeck3 = sequence(0, 0, 50, 0, 50, 0, 50, 0, 50, 50, 0, 25, 75, 0, 0, 0, 25, 75, 0, 50, 0, 0, 0, 50, 25, 50, 0, 0, 75, 50, 0, 0, 0, 25, 25, 0, 75, 0, 50, 75)
+/ getlossdeck4 = sequence(0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0)
+/ newtotal = values.currenttotal+values.gain-values.loss
+/ isgain = values.gain > values.loss
+/ isloss = values.loss > values.gain
+/ iseven = values.loss == values.gain
+/ goodplay = values.number_goodplay
+/ badplay = values.number_badplay
+/ netscore = values.number_goodplay - values.number_badplay
+</expressions>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DATA
+**************************************************************************************************************
+**************************************************************************************************************
+
+
+********************
+raw data
+********************				
+date, time, subject:			date and time script was run with the current subjectnumber 
+values.cardselected:			shows the number of cards played
+values.groupnumber:				the groupnumber (1-4) the subject was randomly assigned to	
+response:						the participant's response
+latency: 						the trial latency
+values.gain:					stores the trial's gain depending on choice
+values.loss:					stores the trial's loss depending on choice
+values.currenttotal:			stores the current amount of money won		
+
+
+<data>
+/file = "IowaGamblingTask_rawdata.iqdat"
+/ columns = [date, time, subject, values.cardsselected, values.groupnumber, response, latency, 
+					values.gain, values.loss, values.currenttotal, values.number_badplay, values.number_goodplay, values.netscore]
+/separatefiles = true
+</data>
+
+********************
+summary data
+********************
+
+script.startdate:				date script was run
+script.starttime:				time script was started
+script.subjectid:				subject id number
+script.groupid:					group id number
+script.elapsedtime:				time it took to run script (in ms)
+/completed:						0 = script was not completed (script was prematurely aborted); 1 = script was completed (all conditions run)
+values.groupnumber:				the groupnumber (1-4) the subject was randomly assigned to	
+values.currenttotal:			stores the current amount of money won		
+
+<summarydata >
+/file = "IowaGamblingTask_summary.iqdat"
+/columns = [script.startdate, script.starttime, script.subjectid, script.elapsedtime, values.completed, 
+values.groupnumber, values.currenttotal]
+</summarydata>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	INSTRUCTIONS ELEMENTS
+**************************************************************************************************************
+**************************************************************************************************************
+
+<text igtinstructions>
+/ items = instructions
+/ select = 1
+/ position = (50%, 60%)
+/ fontstyle = ("Arial", 2%)
+/ size = (80%, 30%)
+/ hjustify = left
+/ valign = top
+</text>
+
+<trial instructions>
+/ stimulusframes = [1=igt, deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, igtinstructions, start]
+/ validresponse = (start)
+/ recorddata = false
+</trial>
+
+<block instructions>
+/ trials = [1=instructions]
+</block>
+**************************************************************************************************************
+**************************************************************************************************************
+	STIMULI
+**************************************************************************************************************
+**************************************************************************************************************
+<text cardsselected>
+/ items = ("Carta seleccionada: <% values.cardsselected %> of <% block.igt.trialscount%>")
+/ position = (50%, 10%)
+/ fontstyle = ("Arial", 2%)
+/ erase = false
+</text>
+
+<text start>
+/ items = ("Iniciar")
+/ position = (50%, 90%)
+/ fontstyle = ("Arial", 3%, false, false, true, false, 5, 0)
+/ txcolor = blue
+</text>
+
+<text continue>
+/ items = ("Siguiente")
+/ position = (50%, 65%)
+/ fontstyle = ("Arial", 3%, false, false, true, false, 5, 0)
+/ txcolor = blue
+</text>
+
+<text gain>
+/ items = ("Gana$<% values.gain%>")
+/ position = (20%, 51%)
+/ valign = top
+/ txcolor = green
+</text>
+
+<text loss>
+/ items = ("Pierde$<% values.loss%>")
+/ position = (20%, 55%)
+/ valign = top
+/ txcolor = red
+</text>
+
+<text previoustotal>
+/ items = ("   Total anterior: $<% values.previoustotal %>   ")
+/ position = (50%, 18%)
+/ erase = false
+</text>
+
+<text currenttotal>
+/ items = ("   Total actual: $<% values.currenttotal %>   ")
+/ position = (50%, 22%)
+/ erase = false
+</text>
+
+<text igt>
+/ items = ("Iowa Gambling Test")
+/ position = (50%, 10%)
+/ fontstyle = ("Arial", 4%)
+/ erase = false
+</text>
+
+<text selectinstructions>
+/ items = instructions
+/ select = 2
+/ position = (50%, 65%)
+</text>
+
+<picture deck1>
+/ items = ("deck.jpg")
+/ position = (20%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<text deck1label>
+/ items = ("Baraja 1")
+/ position = (20%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<picture deck2>
+/ items = ("deck.jpg")
+/ position = (40%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<text deck2label>
+/ items = ("Baraja 2")
+/ position = (40%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<picture deck3>
+/ items = ("deck.jpg")
+/ position = (60%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<text deck3label>
+/ items = ("Baraja 3")
+/ position = (60%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<picture deck4>
+/ items = ("deck.jpg")
+/ position = (80%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<text deck4label>
+/ items = ("Baraja 4")
+/ position = (80%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<picture deckon>
+/ items = ("deckon.jpg")
+/ erase = false
+</picture>
+
+
+<picture deckgain>
+/ items = ("deckgain.jpg")
+/ erase = false
+</picture>
+
+<picture deckloss>
+/ items = ("deckloss.jpg")
+/ erase = false
+</picture>
+
+<sound win>
+/ items = ("sosumi.wav")
+/ playthrough = false
+/ pan = 0
+</sound>
+
+<sound loser>
+/ items = ("quack.wav")
+/ playthrough = false
+/ pan = 0
+</sound>
+
+<sound background>
+/ items =  ("sosumi.wav")
+/ playthrough = false
+</sound>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	MAIN TRIALS
+**************************************************************************************************************
+**************************************************************************************************************
+<trial igt>
+/ ontrialbegin = [picture.deck1.item.1 = "deck.jpg"; picture.deck2.item.1 = "deck.jpg";  picture.deck3.item.1 = "deck.jpg"; picture.deck4.item.1 = "deck.jpg"; sound.background.item.1 = "sosumi.wav"]
+/ stimulusframes = [1=deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, selectinstructions]
+/ validresponse = (deck1, deck2, deck3, deck4)
+/ branch = [if (true) trial.igtfeedback]
+/ ontrialend = [values.cardsselected += 1]
+/ ontrialend = [ if (trial.igt.response == "deck1") { values.gain=100; values.loss=expressions.getlossdeck1; text.gain.hposition=picture.deck1.hposition; text.loss.hposition=picture.deck1.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_badplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck1.item.1 = "deckgain.jpg"; if (expressions.isgain) sound.background.item.1 = "sosumi.wav"; if (expressions.isloss) picture.deck1.item.1 = "deckloss.jpg"; if (expressions.isloss) sound.background.item.1 = "quack.wav"; if (expressions.iseven) picture.deck1.item.1 = "deckon.jpg"; if (expressions.iseven) sound.background.item.1 = "quack.wav"}]
+/ ontrialend = [ if (trial.igt.response == "deck2") { values.gain=100; values.loss=expressions.getlossdeck2; text.gain.hposition=picture.deck2.hposition; text.loss.hposition=picture.deck2.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_badplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck2.item.1 = "deckgain.jpg"; if (expressions.isgain) sound.background.item.1 = "sosumi.wav"; if (expressions.isloss) picture.deck2.item.1 = "deckloss.jpg"; if (expressions.isloss) sound.background.item.1 = "quack.wav"; if (expressions.iseven) picture.deck2.item.1 = "deckon.jpg"; if (expressions.iseven) sound.background.item.1 = "quack.wav"}]
+/ ontrialend = [ if (trial.igt.response == "deck3") { values.gain=50; values.loss=expressions.getlossdeck3;  text.gain.hposition=picture.deck3.hposition; text.loss.hposition=picture.deck3.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_goodplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck3.item.1 = "deckgain.jpg"; if (expressions.isgain) sound.background.item.1 = "sosumi.wav"; if (expressions.isloss) picture.deck3.item.1 = "deckloss.jpg"; if (expressions.isloss) sound.background.item.1 = "quack.wav"; if (expressions.iseven) picture.deck3.item.1 = "deckon.jpg"; if (expressions.iseven) sound.background.item.1 = "quack.wav"}]
+/ ontrialend = [ if (trial.igt.response == "deck4") { values.gain=50; values.loss=expressions.getlossdeck4;  text.gain.hposition=picture.deck4.hposition; text.loss.hposition=picture.deck4.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_goodplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck4.item.1 = "deckgain.jpg"; if (expressions.isgain) sound.background.item.1 = "sosumi.wav"; if (expressions.isloss) picture.deck4.item.1 = "deckloss.jpg"; if (expressions.isloss) sound.background.item.1 = "quack.wav"; if (expressions.iseven) picture.deck4.item.1 = "deckon.jpg"; if (expressions.iseven) sound.background.item.1 = "quack.wav"}]
+</trial>
+
+<trial igtfeedback>
+/ stimulusframes = [1=deck1, deck2, deck3, deck4, gain, loss, background, previoustotal, currenttotal, cardsselected, continue]
+/ validresponse = (continue)
+/ recorddata = false
+</trial>
+**************************************************************************************************************
+**************************************************************************************************************
+	MAIN BLOCK
+**************************************************************************************************************
+**************************************************************************************************************
+
+<block igt>
+/ onblockbegin = [if ( values.groupnumber == 1) { picture.deck1.hposition = 60%; picture.deck2.hposition = 20%; picture.deck3.hposition = 80%; picture.deck4.hposition = 40%;}]
+/ trials = [1-100 = igt]
+</block>
+**************************************************************************************************************
+**************************************************************************************************************
+	EXPERIMENT
+**************************************************************************************************************
+**************************************************************************************************************
+<expt main>
+/ onexptbegin = [values.groupnumber = 1]
+/onexptbegin = [if (values.showcardinfo == false) text.cardsselected.textcolor = white]
+/ blocks = [1=instructions; 2=igt]
+/onexptend = [values.completed = 1]
+</expt>
+
+**************************************************************************************************************
+**************************************************************************************************************
+														End of Script
+**************************************************************************************************************
+**************************************************************************************************************

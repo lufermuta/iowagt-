@@ -1,0 +1,68 @@
+﻿<radiobuttons 1>
+/ caption="Durante las últimas 12 horas durmió alguna siesta:"
+/options = ("SI", "NO")
+/ required = true
+</radiobuttons>
+
+<textbox 2>
+/ caption="Si su respuesta anterior es afirmativa, responda lo siguiente (preguntas 2 a la 5). Si su respuesta fue negativa ponga 0 -cero- y NO en estas preguntas
+¿Cuántos minutos duro la siesta? (hh:mm)."
+</textbox>
+
+<textbox 3>
+/ caption="¿A qué hora fue?(hh:mm AM-PM)."
+</textbox>
+
+<radiobuttons 4>
+/ caption="¿Considera que la siesta fue reparadora?"
+/options = ("SI", "NO")
+</radiobuttons>
+
+<textbox 5>
+/ caption="¿Cuánto tiempo ha pasado (aproximadamente) desde que se despertó hasta este momento?(hh:mm)."
+</textbox>
+
+<radiobuttons 6>
+/ caption="¿Cuántas tazas de cafeína (p.e café, gaseosas oscuras, energizantes) ha consumido en las últimas 24 horas? (taza o pocillo normal 4 onzas)"
+/ options =  ("0 tazas", "1 taza", "De 2 a 3 tazas", "De 4 a 5 tazas", "De 6 a 7 tazas", "Más de 7 tazas")
+/ optionvalues = ("1", "2", "3", "4","5", "6")
+</radiobuttons>
+
+<radiobuttons 7>
+/ caption = "¿En las últimas 24 horas ha consumido sustancias psicoactivas o medicamentos?"
+/options = ("SI", "NO")
+</radiobuttons>
+
+<textbox 8>
+/caption = "Si su respuesta anterior fue afirmativa por favor especifique cuáles consumió (En el caso de que haya contestado NO por favor digite en este espacio la palabra NINGUNA)"
+</textbox>
+
+<radiobuttons 9>
+/caption = "¿Qué tan somnoliento se siente en este momento?"
+/options = ("1 Nada somnoliento", "2", "3", "4", "5", "6 Muy somnoliento")
+/ optionvalues = ("1", "2", "3", "4","5", "6")
+</radiobuttons>
+
+<surveypage demographics1>
+/ caption = 
+                                            "Escala de Vigilia
+
+Las siguientes preguntas buscan explorar su estado de vigilia a lo largo del dia. Por favor responda todas las siguientes preguntas"
+/ fontstyle = ("arial", -16, true, false, false, false, 5, 0)
+/ questions = [1=1; 2=2; 3=3; 4=4; 5=5 ] 
+</surveypage>
+
+<surveypage demographics2>
+/ caption = "Escala de Vigilia (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=6; 2=7; 3=8; 4=9] 
+</surveypage>
+
+
+<survey demographics>
+/ pages = [1=demographics1; 2=demographics2 ]
+/ responsefontstyle = ("Verdana", -12, false, false, false, false, 5, 0)
+/ itemfontstyle = ("Verdana", -13, false, false, false, false, 5, 0)
+/ itemspacing = 2%
+/ showpagenumbers = false
+</survey>

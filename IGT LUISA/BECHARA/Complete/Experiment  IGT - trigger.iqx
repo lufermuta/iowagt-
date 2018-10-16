@@ -11,6 +11,7 @@
 last updated: 15-10-2018
 
 updated for Luisa Munoz (lmunozt@unal.edu.co), based on: Inquisit 4.0 by K. Borchert (katjab@millisecond.com) for Millisecond Software LLC
+
 Copyright ©  09-12-2013 Millisecond Software
 **************************************************************************************************************
 **************************************************************************************************************
@@ -59,14 +60,13 @@ Editable Instructions
 NOTE: instructions can be changed here:
 
 <item instructions>
-/ 1 = "En este juego, su objetivo es ganar tanto dinero como sea posible, en cada ronda, una flecha amarilla encima de una de las cuatro barajas, le indicará la carta que debe seleccionar.
+/ 1 = "En este juego, se le solicitará repetidamente que seleccione una carta de una de las cuatro barajas disponibles. Puede seleccionar una carta haciendo clic con el mouse sobre una de las barajas.
 
-Puede seleccionar una carta haciendo clic con el mouse sobre una de las barajas.
+Con cada carta, puede ganar o perder algo de dinero. Algunas barajas serán más rentables que otras. Intente elegir cartas de las barajas más rentables para que sus ganancias totales sean lo más altas posible. 
 
-Con cada carta seleccionada, puede ganar, perder o ni ganar ni perder dinero.
-Algunas barajas serán más rentables que otras.
+Usted tendrá <% block.igt.trialscount%> posibilidades de seleccionar una carta del mazo que crea que le dará las mayores ganancias. Sus ganancias totales y la cantidad de tarjetas seleccionadas se mostrarán en la pantalla. 
 
-Empieza con $<%values.currenttotal%>."
+Usted iniciará con $<%values.currenttotal%>. Haga clic en ~"Iniciar~" para comenzar."
 / 2 = "Seleccione una carta."
 </item>
 
@@ -97,11 +97,7 @@ previoustotal:							the previous amount of money owned
 cardselected:							adds the number of cards selected
 gain:										stores the trial's gain depending on choice
 loss:										stores the trial's loss depending on choice
-groupnumber:							the groupnumber (1-4) the subject was randomly assigned to	
-arrowposition:							horizontal coordinate of current arrow	
-number_goodplay:						number of times participant chose an advantageous deck
-number_badplay:							number of times participant chose a disadvantageous deck
-			
+groupnumber:							the groupnumber (1-4) the subject was randomly assigned to					
 
 <values>
 /completed = 0
@@ -110,8 +106,6 @@ number_badplay:							number of times participant chose a disadvantageous deck
 / gain = 0
 / loss = 0
 / groupnumber = 0
-/arrowposition = 0
-/targetdeck = 0
 /number_goodplay = 0
 /number_badplay = 0
 /netscore = 0
@@ -124,14 +118,14 @@ number_badplay:							number of times participant chose a disadvantageous deck
 **************************************************************************************************************
 / getlossdeck1 - 
 / getlossdeck4:				calculates the current loss for a played deck
-							Las perdidas se generan en el orden de la lista, la lista sale de la descripcion de Pace-Scott (2012)
+							losses are selected randomly without replacement 
 							=> across 10 trials per deck, you will see the following losses:
 
 <expressions>
-/ getlossdeck1 = sequence(0, 0, 750, 0, 0, 0)
-/ getlossdeck2 = sequence(0, 150, 0, 350, 0, 250)
-/ getlossdeck3 = sequence(0, 75, 50, 0, 25, 0)
-/ getlossdeck4 = sequence(0, 0, 0, 0, 250, 0)
+/ getlossdeck1 = sequence(0, 0, 0, 0, 0, 0, 0, 0, 1250, 0, 0, 0, 0, 1250, 0, 0, 0, 0, 0, 0, 1250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+/ getlossdeck2 = sequence(0, 0, 150, 0, 300, 0, 200, 0, 250, 350, 0, 350, 0, 250, 200, 0, 300, 150, 0, 0, 0, 300, 0, 350, 0, 200, 250, 150, 0, 0, 350, 200, 250, 0, 0, 0, 150, 300, 0, 0)
+/ getlossdeck3 = sequence(0, 0, 50, 0, 50, 0, 50, 0, 50, 50, 0, 25, 75, 0, 0, 0, 25, 75, 0, 50, 0, 0, 0, 50, 25, 50, 0, 0, 75, 50, 0, 0, 0, 25, 25, 0, 75, 0, 50, 75)
+/ getlossdeck4 = sequence(0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0, 0)
 / newtotal = values.currenttotal+values.gain-values.loss
 / isgain = values.gain > values.loss
 / isloss = values.loss > values.gain
@@ -140,6 +134,24 @@ number_badplay:							number of times participant chose a disadvantageous deck
 / badplay = values.number_badplay
 / netscore = values.number_goodplay - values.number_badplay
 </expressions>
+
+*******************************************************************************************************************
+										        PUERTO PARALELO
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+<port select_signal>
+/ port = LPT1
+/ subport = data
+/ items = ("00100000")
+</port>
+
+<port instructions_signal>
+/ port = LPT1
+/ subport = data
+/ items = ("00100000")
+</port>
+
 
 **************************************************************************************************************
 **************************************************************************************************************
@@ -158,18 +170,13 @@ response:						the participant's response
 latency: 						the trial latency
 values.gain:					stores the trial's gain depending on choice
 values.loss:					stores the trial's loss depending on choice
-values.currenttotal:			stores the current amount of money won
-values.number_badplay			number of times participant chose a disadvantageous deck
-values.number_goodplay			number of times participant chose a advantageous deck
-
-
-					
+values.currenttotal:			stores the current amount of money won		
 
 
 <data>
 /file = "IowaGamblingTask_rawdata.iqdat"
 / columns = [date, time, subject, values.cardsselected, values.groupnumber, response, latency, 
-					values.gain, values.loss, values.currenttotal, values.number_badplay, values.number_goodplay,values.netscore]
+					values.gain, values.loss, values.currenttotal, values.number_badplay, values.number_goodplay, values.netscore]
 /separatefiles = true
 </data>
 
@@ -202,14 +209,14 @@ values.groupnumber, values.currenttotal]
 / items = instructions
 / select = 1
 / position = (50%, 60%)
-/ fontstyle = ("Arial", 1.75%)
+/ fontstyle = ("Arial", 2%)
 / size = (80%, 30%)
 / hjustify = left
 / valign = top
 </text>
 
 <trial instructions>
-/ stimulusframes = [1=igt, deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, igtinstructions, start]
+/ stimulusframes = [1=igt, deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, igtinstructions, start, instructions_signal]
 / validresponse = (start)
 / recorddata = false
 </trial>
@@ -224,7 +231,7 @@ values.groupnumber, values.currenttotal]
 **************************************************************************************************************
 <text cardsselected>
 / items = ("Carta seleccionada: <% values.cardsselected %> of <% block.igt.trialscount%>")
-/ position = (50%, 6%)
+/ position = (50%, 10%)
 / fontstyle = ("Arial", 2%)
 / erase = false
 </text>
@@ -238,34 +245,34 @@ values.groupnumber, values.currenttotal]
 
 <text continue>
 / items = ("Siguiente")
-/ position = (50%, 75%)
+/ position = (50%, 65%)
 / fontstyle = ("Arial", 3%, false, false, true, false, 5, 0)
 / txcolor = blue
 </text>
 
 <text gain>
 / items = ("Gana$<% values.gain%>")
-/ position = (20%, 56%)
+/ position = (20%, 51%)
 / valign = top
 / txcolor = green
 </text>
 
 <text loss>
 / items = ("Pierde$<% values.loss%>")
-/ position = (20%, 60%)
+/ position = (20%, 55%)
 / valign = top
 / txcolor = red
 </text>
 
 <text previoustotal>
 / items = ("   Total anterior: $<% values.previoustotal %>   ")
-/ position = (50%, 15%)
+/ position = (50%, 18%)
 / erase = false
 </text>
 
 <text currenttotal>
 / items = ("   Total actual: $<% values.currenttotal %>   ")
-/ position = (50%, 19%)
+/ position = (50%, 22%)
 / erase = false
 </text>
 
@@ -284,7 +291,7 @@ values.groupnumber, values.currenttotal]
 
 <picture deck1>
 / items = ("deck.jpg")
-/ position = (20%, 51%)
+/ position = (20%, 50%)
 / valign = bottom
 / erase = false
 / size = (20%, 20%)
@@ -292,14 +299,14 @@ values.groupnumber, values.currenttotal]
 
 <text deck1label>
 / items = ("Baraja 1")
-/ position = (20%, 52%)
+/ position = (20%,51%)
 / valign = top
 / erase = false
 </text>
 
 <picture deck2>
 / items = ("deck.jpg")
-/ position = (40%, 51%)
+/ position = (40%, 50%)
 / valign = bottom
 / erase = false
 / size = (20%, 20%)
@@ -307,14 +314,14 @@ values.groupnumber, values.currenttotal]
 
 <text deck2label>
 / items = ("Baraja 2")
-/ position = (40%, 52%)
+/ position = (40%,51%)
 / valign = top
 / erase = false
 </text>
 
 <picture deck3>
 / items = ("deck.jpg")
-/ position = (60%, 51%)
+/ position = (60%, 50%)
 / valign = bottom
 / erase = false
 / size = (20%, 20%)
@@ -322,14 +329,14 @@ values.groupnumber, values.currenttotal]
 
 <text deck3label>
 / items = ("Baraja 3")
-/ position = (60%,52%)
+/ position = (60%,51%)
 / valign = top
 / erase = false
 </text>
 
 <picture deck4>
 / items = ("deck.jpg")
-/ position = (80%, 51%)
+/ position = (80%, 50%)
 / valign = bottom
 / erase = false
 / size = (20%, 20%)
@@ -337,7 +344,7 @@ values.groupnumber, values.currenttotal]
 
 <text deck4label>
 / items = ("Baraja 4")
-/ position = (80%,52%)
+/ position = (80%,51%)
 / valign = top
 / erase = false
 </text>
@@ -358,39 +365,22 @@ values.groupnumber, values.currenttotal]
 / erase = false
 </picture>
 
-<picture arrow>
-/items = ("arrow.png")
-/hposition = values.arrowposition
-/vposition = 25%
-/size = (10%, 10%)
-</picture>
-
 <sound win>
 / items = ("sosumi.wav")
-/playthrough = false
+/ playthrough = false
 / pan = 0
 </sound>
 
 <sound loser>
 / items = ("quack.wav")
-/playthrough = false
+/ playthrough = false
 / pan = 0
 </sound>
 
-
-**************************************************************************************************************
-**************************************************************************************************************
-	LISTS
-**************************************************************************************************************
-**************************************************************************************************************
-
-A deck is randomly selected from this list (without replacement) 
-=> 24 trials per block: each deck is selected 6 times
-<list currentdeck>
-/items = (1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
-/replace = false
-/resetinterval = 1
-</list>
+<sound background>
+/ items =  ("sosumi.wav")
+/ playthrough = false
+</sound>
 
 **************************************************************************************************************
 **************************************************************************************************************
@@ -398,30 +388,19 @@ A deck is randomly selected from this list (without replacement)
 **************************************************************************************************************
 **************************************************************************************************************
 <trial igt>
-
-/ontrialbegin = [values.targetdeck = list.currentdeck.nextvalue]
-/ontrialbegin = [if (values.targetdeck == 1) {values.arrowposition = picture.deck1.hposition}]
-/ontrialbegin = [if (values.targetdeck == 2) {values.arrowposition = picture.deck2.hposition}]
-/ontrialbegin = [if (values.targetdeck == 3) {values.arrowposition = picture.deck3.hposition}]
-/ontrialbegin = [if (values.targetdeck == 4) {values.arrowposition = picture.deck4.hposition}]
-
-/ ontrialbegin = [picture.deck1.item.1 = "deck.jpg"; picture.deck2.item.1 = "deck.jpg";  picture.deck3.item.1 = "deck.jpg"; picture.deck4.item.1 = "deck.jpg";]
-/ stimulusframes = [1=deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, selectinstructions, arrow]
+/ ontrialbegin = [picture.deck1.item.1 = "deck.jpg"; picture.deck2.item.1 = "deck.jpg";  picture.deck3.item.1 = "deck.jpg"; picture.deck4.item.1 = "deck.jpg"; sound.background.item.1 = "sosumi.wav"]
+/ stimulusframes = [1=deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, selectinstructions]
 / validresponse = (deck1, deck2, deck3, deck4)
 / branch = [if (true) trial.igtfeedback]
 / ontrialend = [values.cardsselected += 1]
-/ ontrialend = [ if (trial.igt.response == "deck1") { values.gain=100; values.loss=expressions.getlossdeck1; text.gain.hposition=picture.deck1.hposition; text.loss.hposition=picture.deck1.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_badplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) {picture.deck1.item.1 = "deckgain.jpg"; sound.win.playthrough}; if (expressions.isloss) {picture.deck1.item.1 = "deckloss.jpg"; sound.loser.playthrough}; if (expressions.iseven) picture.deck1.item.1 = "deckon.jpg"}]
-/ ontrialend = [ if (trial.igt.response == "deck2") { values.gain=100; values.loss=expressions.getlossdeck2; text.gain.hposition=picture.deck2.hposition; text.loss.hposition=picture.deck2.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_badplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) {picture.deck2.item.1 = "deckgain.jpg"; sound.win.playthrough}; if (expressions.isloss) {picture.deck2.item.1 = "deckloss.jpg"; sound.loser.playthrough}; if (expressions.iseven) picture.deck2.item.1 = "deckon.jpg"}]
-/ ontrialend = [ if (trial.igt.response == "deck3") { values.gain=50; values.loss=expressions.getlossdeck3;  text.gain.hposition=picture.deck3.hposition; text.loss.hposition=picture.deck3.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_goodplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) {picture.deck3.item.1 = "deckgain.jpg"; sound.win.playthrough}; if (expressions.isloss) {picture.deck3.item.1 = "deckloss.jpg"; sound.loser.playthrough}; if (expressions.iseven) picture.deck3.item.1 = "deckon.jpg"}]
-/ ontrialend = [ if (trial.igt.response == "deck4") { values.gain=50; values.loss=expressions.getlossdeck4;  text.gain.hposition=picture.deck4.hposition; text.loss.hposition=picture.deck4.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_goodplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) {picture.deck4.item.1 = "deckgain.jpg"; sound.win.playthrough}; if (expressions.isloss) {picture.deck4.item.1 = "deckloss.jpg"; sound.loser.playthrough}; if (expressions.iseven) picture.deck4.item.1 = "deckon.jpg"}]
-/ branch = [if (expressions.isgain) sound.win.playthrough]
-/ branch = [if (expressions.isloss) sound.loser.playthrough]
-
+/ ontrialend = [ if (trial.igt.response == "deck1") { values.gain=100; values.loss=expressions.getlossdeck1; text.gain.hposition=picture.deck1.hposition; text.loss.hposition=picture.deck1.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_badplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck1.item.1 = "deckgain.jpg"; if (expressions.isgain) sound.background.item.1 = "sosumi.wav"; if (expressions.isloss) picture.deck1.item.1 = "deckloss.jpg"; if (expressions.isloss) sound.background.item.1 = "quack.wav"; if (expressions.iseven) picture.deck1.item.1 = "deckon.jpg"; if (expressions.iseven) sound.background.item.1 = "quack.wav"; select_signal}]
+/ ontrialend = [ if (trial.igt.response == "deck2") { values.gain=100; values.loss=expressions.getlossdeck2; text.gain.hposition=picture.deck2.hposition; text.loss.hposition=picture.deck2.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_badplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck2.item.1 = "deckgain.jpg"; if (expressions.isgain) sound.background.item.1 = "sosumi.wav"; if (expressions.isloss) picture.deck2.item.1 = "deckloss.jpg"; if (expressions.isloss) sound.background.item.1 = "quack.wav"; if (expressions.iseven) picture.deck2.item.1 = "deckon.jpg"; if (expressions.iseven) sound.background.item.1 = "quack.wav"; select_signal}]
+/ ontrialend = [ if (trial.igt.response == "deck3") { values.gain=50; values.loss=expressions.getlossdeck3;  text.gain.hposition=picture.deck3.hposition; text.loss.hposition=picture.deck3.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_goodplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck3.item.1 = "deckgain.jpg"; if (expressions.isgain) sound.background.item.1 = "sosumi.wav"; if (expressions.isloss) picture.deck3.item.1 = "deckloss.jpg"; if (expressions.isloss) sound.background.item.1 = "quack.wav"; if (expressions.iseven) picture.deck3.item.1 = "deckon.jpg"; if (expressions.iseven) sound.background.item.1 = "quack.wav"; select_signal}]
+/ ontrialend = [ if (trial.igt.response == "deck4") { values.gain=50; values.loss=expressions.getlossdeck4;  text.gain.hposition=picture.deck4.hposition; text.loss.hposition=picture.deck4.hposition;  values.previoustotal=values.currenttotal; values.currenttotal = expressions.newtotal; values.number_goodplay += 1; values.netscore = values.number_goodplay - values.number_badplay; if (expressions.isgain) picture.deck4.item.1 = "deckgain.jpg"; if (expressions.isgain) sound.background.item.1 = "sosumi.wav"; if (expressions.isloss) picture.deck4.item.1 = "deckloss.jpg"; if (expressions.isloss) sound.background.item.1 = "quack.wav"; if (expressions.iseven) picture.deck4.item.1 = "deckon.jpg"; if (expressions.iseven) sound.background.item.1 = "quack.wav"; select_signal}]
 </trial>
 
-
 <trial igtfeedback>
-/ stimulusframes = [1=deck1, deck2, deck3, deck4, gain, loss, previoustotal, currenttotal, cardsselected, win, loser, continue]
+/ stimulusframes = [1=deck1, deck2, deck3, deck4, gain, loss, background, previoustotal, currenttotal, cardsselected, continue]
 / validresponse = (continue)
 / recorddata = false
 </trial>
@@ -433,7 +412,7 @@ A deck is randomly selected from this list (without replacement)
 
 <block igt>
 / onblockbegin = [if ( values.groupnumber == 1) { picture.deck1.hposition = 60%; picture.deck2.hposition = 20%; picture.deck3.hposition = 80%; picture.deck4.hposition = 40%;}]
-/ trials = [1-24 = igt]
+/ trials = [1-100 = igt]
 </block>
 **************************************************************************************************************
 **************************************************************************************************************

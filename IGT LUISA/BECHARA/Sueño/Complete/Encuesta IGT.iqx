@@ -1,0 +1,105 @@
+﻿<dropdown sex>
+/ caption = "Sexo"
+/ options = ("Femenino", "Masculino")
+</dropdown>
+
+<textbox age>
+/ caption = "Edad"
+/ mask = positiveinteger
+/ range = (7, 110)
+</textbox>
+
+<radiobuttons 1>
+/ caption = "¿Cree que las ganancias eran iguales entre las cuatro barajas?"
+/ options = ("Si", "No", "No estoy seguro")
+</radiobuttons>
+
+<radiobuttons 2>
+/ caption = "¿Cree que las perdidas eran iguales entre las cuatro barajas?"
+/ options = ("Si", "No", "No estoy seguro")
+</radiobuttons>
+
+<radiobuttons 3>
+/ caption = "¿Cree que había alguna baraja o barajas que generaban más ganancias que las demas?"
+/ options = ("Si", "No", "No estoy seguro")
+</radiobuttons>
+
+<radiobuttons 4>
+/ caption = "¿Cree que había alguna baraja o barajas que generaban MENOS ganancias que las demas?"
+/ options = ("Si", "No", "No estoy seguro")
+</radiobuttons>
+
+<dropdown 5>
+/ caption = "Si cree que habia una baraja que generaba mas ganancias señale cual era"
+/ options = ("Baraja 1", "Baraja 2", "Baraja 3", "Baraja 4", "No estoy seguro")
+</dropdown>
+
+<dropdown 6>
+/ caption = "Si cree que habia una segunda baraja que generaba mas ganancias señale cual era"
+/ options = ("Baraja 1", "Baraja 2", "Baraja 3", "Baraja 4", "No estoy seguro")
+</dropdown>
+
+<dropdown 7>
+/ caption = "Si cree que habia una baraja que generaba MENOS ganancias señale cual era"
+/ options = ("Baraja 1", "Baraja 2", "Baraja 3", "Baraja 4", "No estoy seguro")
+</dropdown>
+
+<dropdown 8>
+/ caption = "Si cree que habia una segunda baraja que generaba MENOS ganancias señale cual era"
+/ options = ("Baraja 1", "Baraja 2", "Baraja 3", "Baraja 4", "No estoy seguro")
+</dropdown>
+
+<radiobuttons 9>
+/ caption = "¿De que baraja prefirio JUGAR mas cartas?"
+/ options = ("baraja 1", "baraja 2", "baraja 3", "baraja 4")
+</radiobuttons>
+
+<radiobuttons 10>
+/ caption = "¿De que baraja prefirio PASAR mas cartas?"
+/ options = ("baraja 1", "baraja 2", "baraja 3", "baraja 4")
+</radiobuttons>
+
+<surveypage demographics1>
+/ caption = "Por favor responda las siguientes preguntas"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=sex; 2=age; 3=1; 4=2; 5=3; 6=4] 
+</surveypage>
+
+<surveypage demographics2>
+/ caption = "por favor responda las siguientes preguntas (continuacion)"
+/ fontstyle = ("Verdana", -16, true, false, false, false, 5, 0)
+/ questions = [1=5; 2=6; 3=7; 4=8; 5=9; 6=10] 
+</surveypage>
+
+
+<survey demographics>
+/ pages = [1=demographics1; 2=demographics2]
+/ responsefontstyle = ("Verdana", -12, false, false, false, false, 5, 0)
+/ itemfontstyle = ("Verdana", -13, false, false, false, false, 5, 0)
+/ itemspacing = 2%
+/ showpagenumbers = false
+</survey>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

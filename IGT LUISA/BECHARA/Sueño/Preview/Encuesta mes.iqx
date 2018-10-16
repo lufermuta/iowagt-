@@ -41,13 +41,13 @@
 </radiobuttons>
 
 <radiobuttons 6>
-/ caption = "¿En el último mes le han dicho (algún familiar, pareja u otro) que ha roncado durante el sueño? (En una escala del 1 al 6, en donde 1 es nunca y 6 es siempre)"
+/ caption = "¿En el último mes le han dicho (algún familiar, pareja u otro) que ha roncado durante el sueño? (En una escala del 1 al 6, en donde 1 es “nunca” y 6 es “siempre”)."
 / options = ("1 Nunca", "2", "3", "4", "5", "6 Siempre")
 / optionvalues = ("1", "2", "3", "4", "5", "6")
 </radiobuttons>
 
 <radiobuttons 7>
-/ caption = "¿Ha sentido que su sueño NO era tranquilo (movimiento sin descanso, sensación de tensión, habla, etc.) mientras duerme? (En una escala del 1 al 6, en donde 1 es totalmente en desacuerdo y 6 es totalmente de acuerdo) "
+/ caption = "¿Ha sentido que su sueño no era tranquilo (movimiento sin descanso, sensación de tensión, habla, etc.) mientras duerme? (En una escala del 1 al 6, en donde 1 es totalmente en desacuerdo y 6 es totalmente de acuerdo) "
 / options = ("1 Totalmente en desacuerdo", "2", "3", "4", "5","6 totalmente de acuerdo")
 / optionvalues = ("1", "2", "3", "4", "5", "6")
 </radiobuttons>
